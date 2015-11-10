@@ -28,6 +28,7 @@ public:
 private:
     static Type decodeType(const std::string & type);
 
+    static std::vector<uint8_t> getData(const std::string &line, uint32_t dataLen);
 };
 
 

@@ -5,9 +5,12 @@
 #ifndef CC2530_HEXLINE_H
 #define CC2530_HEXLINE_H
 
+#include <vector>
+#include <string>
+#include <stdint.h>
 
 class HexLine {
-
+    static std::vector<uint8_t> getAsBytes(const std::string && line);
 };
 
 
