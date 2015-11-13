@@ -22,13 +22,9 @@ public:
 
     using Line=std::tuple<int, int, Type, std::vector<uint8_t> >;
 public:
-    static IntelHexLine * parseLine(const std::string & line);
+    static IntelHexLine * parseLine(std::string && line);
 public:
-    virtual void execute();
-private:
-    static Type decodeType(const std::string & type);
-
-    static std::vector<uint8_t> getData(const std::string &line, uint32_t dataLen);
+    virtual void execute(std::vector<uint8_t> & memory)=0;
 };
 
 

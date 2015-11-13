@@ -10,7 +10,9 @@
 #include <stdint.h>
 
 class HexLine {
-    static std::vector<uint8_t> getAsBytes(const std::string && line);
+public:
+
+    static std::vector<uint8_t> getAsBytes(std::string && line);
 };
 
 

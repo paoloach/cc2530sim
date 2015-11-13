@@ -14,11 +14,9 @@ private:
     std::vector<uint8_t> data;
     uint32_t address;
 public:
-    IntelHexData(const std::string & line);
-
     IntelHexData(uint32_t address, std::vector<uint8_t> &&vector);
 
-    virtual void execute() override ;
+    virtual void execute(std::vector<uint8_t> & memory) override ;
 };
 
 
