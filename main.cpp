@@ -1,2 +1,21 @@
 #include <iostream>
-using namespace std;int main(){cout<<"Hello, World!"<<endl;return 0;}
+#include <fstream>
+#include "FlashMemory.h"
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    FlashMemory flashMemory;
+
+    if (argc != 2){
+        std::cerr << " you must add the filename: " << argc;
+        exit(-1);
+    }
+    std::cout << "loading " << argv[1] << std::endl;
+    std::ifstream hexFile(argv[1]);
+
+    flashMemory.loafFromString(hexFile);
+
+    std::cout << "end" << std::endl;
+    return 0;
+}

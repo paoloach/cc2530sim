@@ -4,10 +4,8 @@
 
 #include <string>
 #include "FlashMemory.h"
+#include "loader/IntelHexLoader.h"
 
 void FlashMemory::loafFromString(std::istream &stream) {
-    char line[256];
-    stream.getline(line,256);
-
-
+    IntelHexLoader::load(stream, memory);
 }

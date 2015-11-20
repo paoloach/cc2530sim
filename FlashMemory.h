@@ -8,13 +8,14 @@
 #include <stdint.h>
 #include <istream>
 #include <ctype.h>
+#include <vector>
 
 
 class FlashMemory {
 public:
     void loafFromString(std::istream & stream);
 private:
-    uint8_t data[0x4000];
+    std::vector<uint8_t> memory;
 
 
 };

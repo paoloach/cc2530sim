@@ -8,7 +8,9 @@
 
 TEST(IntelHexData, simpleCase){
     std::vector<uint8_t > memory;
-    IntelHexLine * intelHexLine = IntelHexLine::parseLine(std::string(":100130003F0156702B5E712B722B732146013421C7"));
+    IntelHexLine::IntelHexStatus status;
+
+    IntelHexLine * intelHexLine = IntelHexLine::parseLine(std::string(":100130003F0156702B5E712B722B732146013421C7"),status);
     ASSERT_NE(intelHexLine, nullptr);
     IntelHexData * intelHexData = dynamic_cast<IntelHexData *>(intelHexLine);
     ASSERT_NE(intelHexData, nullptr);
@@ -18,6 +20,4 @@ TEST(IntelHexData, simpleCase){
     ASSERT_EQ(0x3F,memory[0x130] );
     ASSERT_EQ(0x72,memory[0x138] );
     ASSERT_EQ(0x21,memory[0x13F] );
-
-
 }

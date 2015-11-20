@@ -5,12 +5,16 @@
 #ifndef CC2530_INTELHEXLOADER_H
 #define CC2530_INTELHEXLOADER_H
 
-
+#include <vector>
 #include <istream>
+
 
 class IntelHexLoader {
 public:
-    void load(std::istream & in);
+
+    void static load(std::istream & in,std::vector<uint8_t> & memory);
+
+
 };
 
 

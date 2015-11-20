@@ -5,12 +5,13 @@
 #include "IntelHexData.h"
 
 
-IntelHexData::IntelHexData(uint32_t address, std::vector<uint8_t> &&data) :address(address), data(data){
+IntelHexData::IntelHexData(uint32_t address, IntelHexStatus & status, std::vector<uint8_t> &&data) :address(address), status(status),data(data){
 }
 
 void IntelHexData::execute(std::vector<uint8_t> & memory) {
-    if (memory.size() < address){
-        memory.resize(address, 0);
+    uint32_t  realAddress = (status.extendLinearAddress << 16) + address;
+    if (memory.size() < realAddress){
+        memory.resize(realAddress, 0);
     }
     for(uint8_t byte: data){
         memory.push_back(byte);

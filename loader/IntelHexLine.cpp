@@ -6,8 +6,10 @@
 #include "../Exceptions/InvalidIntelHexFile.h"
 #include "IntelHexData.h"
 #include "HexLine.h"
+#include "IntelEndOfFile.h"
+#include "IntelHexExtendedLinearAddress.h"
 
-IntelHexLine * IntelHexLine::parseLine(std::string &&line) {
+IntelHexLine * IntelHexLine::parseLine(std::string &&line, IntelHexStatus & status) {
 
     auto bytes = HexLine::getAsBytes(std::move(line));
     auto size = bytes[0];
@@ -16,7 +18,11 @@ IntelHexLine * IntelHexLine::parseLine(std::string &&line) {
 
     switch(bytes[3]){
         case 0:
-            return new IntelHexData(address, std::vector<uint8_t>(startData, startData+size));
+            return new IntelHexData(address, status, std::vector<uint8_t>(startData, startData+size));
+        case 1:
+            return new IntelEndOfFile(status.finished);
+        case 4:
+            return new IntelHexExtendedLinearAddress(status.extendLinearAddress, std::vector<uint8_t>(startData, startData+size));
     }
 
     return nullptr;
