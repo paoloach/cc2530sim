@@ -9,7 +9,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(SOURCE_FILES main.cpp Exceptions/InvalidIntelHexFile.cpp FlashMemory.cpp)
 
-SET(SOURCE_LOADER_SRC loader/HexLine.cpp loader/IntelHexLine.cpp loader/IntelHexData.cpp loader/IntelHexLoader.cpp loader/IntelEndOfFile.cpp loader/IntelEndOfFile.h loader/IntelHexExtendedLinearAddress.cpp loader/IntelHexExtendedLinearAddress.h)
+SET(SOURCE_LOADER_SRC loader/HexLine.cpp loader/IntelHexLine.cpp loader/IntelHexData.cpp loader/IntelHexLoader.cpp loader/IntelEndOfFile.cpp loader/IntelEndOfFile.h loader/IntelHexExtendedLinearAddress.cpp loader/IntelHexExtendedLinearAddress.h loader/IntelHexInvalidLine.cpp loader/IntelHexInvalidLine.h loader/IntelHexStartLinearAddress.cpp loader/IntelHexStartLinearAddress.h)
 
 add_library(loader_lib  OBJECT  ${SOURCE_LOADER_SRC})
 add_executable(cc2530sim ${SOURCE_FILES} $<TARGET_OBJECTS:loader_lib>)

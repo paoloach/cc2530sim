@@ -12,7 +12,7 @@
 class HexLine {
 public:
 
-    static std::vector<uint8_t> getAsBytes(std::string && line);
+    static std::vector<uint8_t> getAsBytes(const std::string & line);
 };
 
 

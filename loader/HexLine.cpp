@@ -5,7 +5,7 @@
 #include "HexLine.h"
 #include "../Exceptions/InvalidIntelHexFile.h"
 
-std::vector<uint8_t> HexLine::getAsBytes(std::string &&line) {
+std::vector<uint8_t> HexLine::getAsBytes(const std::string &line) {
     if (line.size() == 0){
         throw InvalidIntelHexFile("line too short");
     }
