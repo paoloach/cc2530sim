@@ -14,6 +14,8 @@
 class FlashMemory {
 public:
     void loafFromString(std::istream & stream);
+
+    uint8_t operator[](uint16_t addr);
 private:
     std::vector<uint8_t> memory;
 
