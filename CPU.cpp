@@ -5,15 +5,16 @@
 
 #include "CPU.h"
 
-CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(IP, flashMemory){
+CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(IP, flashMemory,xdata){
     IP=0;
+    xdata.resize(32*1024);
 }
 
 void CPU::click() {
-    auto data = flashMemory[IP];
+    currentInstruct = currentInstruct->cycle();
 }
 
 void CPU::reset() {
     IP=0;
-
+    currentInstruct = instructionFactory.decode(flashMemory[IP]);
 }

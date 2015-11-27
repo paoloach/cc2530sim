@@ -1,3 +1,11 @@
+.idea
+CMakeFiles
+
+CMakeCache.txt
+Makefile
+cc2530sim
+cmake_install.cmake
+
 # Compiled Object files
 *.slo
 *.lo

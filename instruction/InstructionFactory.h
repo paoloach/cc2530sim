@@ -11,14 +11,16 @@
 #include <memory>
 #include "Instruction.h"
 #include "../FlashMemory.h"
+#include "../MemoryLocation.h"
 
 class InstructionFactory {
 public:
-    InstructionFactory(uint32_t & IP, FlashMemory & flashMemory);
+    InstructionFactory(uint32_t & IP, FlashMemory & flashMemory,std::vector<MemoryLocation> & xdata);
     std::shared_ptr<Instruction> decode(uint8_t i);
 private:
     uint32_t & IP;
     FlashMemory & flashMemory;
+    std::vector<MemoryLocation> & xdata;
     std::vector<std::shared_ptr<Instruction>> decodeMap;
 };
 
