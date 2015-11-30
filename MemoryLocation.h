@@ -11,10 +11,19 @@
 
 class MemoryLocation {
 public:
+    MemoryLocation():value(0){}
     MemoryLocation(uint8_t value):value(value){}
 
-    bool getBit(int index){
+    virtual bool getBit(int index){
         return std::bitset<8>(value)[index];
+    }
+
+    virtual void setValue(uint8_t newValue){
+        value = newValue;
+    }
+
+    virtual uint8_t getValue() {
+        return value;
     }
 protected:
     uint8_t value;

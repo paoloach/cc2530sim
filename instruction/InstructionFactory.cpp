@@ -7,6 +7,8 @@
 #include "UnknownInstruction.h"
 #include "Nop.h"
 #include "LongJump.h"
+#include "MovImmediateToDirect.h"
+#include "LCall.h"
 
 InstructionFactory::InstructionFactory(uint32_t &IP, FlashMemory &flashMemory, std::vector<MemoryLocation> &xdata) : IP(
         IP), flashMemory(flashMemory), xdata(xdata) {
@@ -16,6 +18,8 @@ InstructionFactory::InstructionFactory(uint32_t &IP, FlashMemory &flashMemory, s
     }
     decodeMap[0] = std::make_shared<Nop>(*this, IP, flashMemory);
     decodeMap[2] = std::make_shared<LongJump>(*this, IP, flashMemory);
+    decodeMap[0x12] = std::make_shared<LCall>(*this, IP, flashMemory,xdata,xdata[81]);
+    decodeMap[0x75] = std::make_shared<MovImmediateToDirect>(*this, IP, flashMemory,xdata);
 }
 
 std::shared_ptr<Instruction> InstructionFactory::decode(uint8_t opcode) {
