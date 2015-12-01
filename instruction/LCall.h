@@ -12,7 +12,7 @@
 
 class LCall : public Instruction{
 public:
-    LCall(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, std::vector<MemoryLocation> & xdata, MemoryLocation & SP) : instructionFactory(
+    LCall(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData & xdata, MemoryLocation & SP) : instructionFactory(
             instructionFactory), IP(IP), flashMemory(flashMemory), SP(SP),xdata(xdata), cycleCounter(6){ }
 
     virtual ~LCall() = default;
@@ -25,7 +25,7 @@ private:
     uint32_t &IP;
     FlashMemory &flashMemory;
     MemoryLocation & SP;
-    std::vector<MemoryLocation> & xdata;
+    XData & xdata;
     int cycleCounter;
 };
 

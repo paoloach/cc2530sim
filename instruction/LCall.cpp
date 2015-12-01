@@ -3,6 +3,7 @@
 // Copyright (c) 2015  Paolo Achdjian All rights reserved.
 //
 #include <iostream>
+#include <iomanip>
 #include "LCall.h"
 std::shared_ptr<Instruction> LCall::cycle() {
     if (cycleCounter>0){
@@ -21,7 +22,7 @@ std::shared_ptr<Instruction> LCall::cycle() {
         xdata[spAddress] = (IP >> 8) & 0xFF;
         SP.setValue(spAddress);
         IP = newAddress;
-        std::cout << "lcall to" << std::hex << (uint)newAddress << std::endl;
+        std::cout << "lcall to address 0x" << std::uppercase << std::setw(4) << std::setfill('0') << std::hex <<  (uint)newAddress << std::endl;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }

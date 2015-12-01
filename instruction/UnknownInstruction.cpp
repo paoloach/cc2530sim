@@ -5,8 +5,10 @@
 
 #include <iostream>
 #include "UnknownInstruction.h"
+#include <iomanip>
 
 std::shared_ptr<Instruction> UnknownInstruction::cycle() {
-    std::cerr << "unknown op " << std::hex << (int)OP << " at " << (int)IP << std::endl;
+    std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+    exit(-1);
     return instructionFactory.decode(OP);
 }

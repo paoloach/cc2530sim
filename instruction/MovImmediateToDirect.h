@@ -12,7 +12,7 @@
 
 class MovImmediateToDirect: public Instruction {
 public:
-    MovImmediateToDirect(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, std::vector<MemoryLocation> & xdata) : instructionFactory(
+    MovImmediateToDirect(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData & xdata) : instructionFactory(
             instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(3){ }
 
     virtual ~MovImmediateToDirect() = default;
@@ -24,7 +24,7 @@ private:
     InstructionFactory &instructionFactory;
     uint32_t &IP;
     FlashMemory &flashMemory;
-    std::vector<MemoryLocation> & xdata;
+    XData & xdata;
     int cycleCounter;
 };
 

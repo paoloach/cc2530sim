@@ -7,7 +7,6 @@
 
 CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(IP, flashMemory,xdata){
     IP=0;
-    xdata.resize(32*1024);
 }
 
 void CPU::click() {

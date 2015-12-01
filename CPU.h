@@ -10,6 +10,7 @@
 #include "FlashMemory.h"
 #include "MemoryLocation.h"
 #include "instruction/InstructionFactory.h"
+#include "XData.h"
 
 class CPU {
 public:
@@ -19,7 +20,7 @@ public:
     void reset();
 private:
     FlashMemory & flashMemory;
-    std::vector<MemoryLocation> xdata;
+    XData xdata;
     uint32_t IP;
     InstructionFactory instructionFactory;
     std::shared_ptr<Instruction> currentInstruct;
