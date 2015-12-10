@@ -5,22 +5,19 @@
 
 #include "InstructionFactory.h"
 #include "UnknownInstruction.h"
-#include "Nop.h"
-#include "LongJump.h"
-#include "MovImmediateToDirect.h"
-#include "LCall.h"
-#include "../Registers.h"
 
 InstructionFactory::InstructionFactory(uint32_t &IP, FlashMemory &flashMemory, XData &xdata) : IP(
         IP), flashMemory(flashMemory), xdata(xdata) {
     decodeMap.resize(256);
     for (int i = 0; i < 256; i++) {
-        decodeMap[i] = std::make_shared<UnknownInstruction>(*this, i, IP);
+        decodeMap[i] = std::make_shared<UnknownInstruction>(i, *this, IP, flashMemory,xdata);
     }
-    decodeMap[0] = std::make_shared<Nop>(*this, IP, flashMemory);
-    decodeMap[2] = std::make_shared<LongJump>(*this, IP, flashMemory);
-    decodeMap[0x12] = std::make_shared<LCall>(*this, IP, flashMemory,xdata,xdata[Register::SP]);
-    decodeMap[0x75] = std::make_shared<MovImmediateToDirect>(*this, IP, flashMemory,xdata);
+    decodeMap[0] = std::make_shared<InstrTempl<Instructions::NOP>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x75] = std::make_shared<InstrTempl<Instructions::MOV_DATA_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[2] = std::make_shared<InstrTempl<Instructions::LJMP>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x12] = std::make_shared<InstrTempl<Instructions::LCALL>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x54] = std::make_shared<InstrTempl<Instructions::MOV_A_DIRECT>>(*this, IP, flashMemory,xdata);
+
 }
 
 std::shared_ptr<Instruction> InstructionFactory::decode(uint8_t opcode) {

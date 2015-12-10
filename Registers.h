@@ -7,7 +7,11 @@
 #define CC2530SIM_REGISTERS_H
 
 enum class Register {
-    SP=0x81
+    SP=0x81,
+    PSW=0xD0,
+    A=0xE0,
+    B=0xF0,
+
 
 };
 

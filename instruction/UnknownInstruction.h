@@ -11,16 +11,14 @@
 
 class UnknownInstruction : public Instruction {
 public:
-    UnknownInstruction(InstructionFactory &instructionFactory, uint8_t OP,  uint32_t &IP):instructionFactory(instructionFactory),OP(OP),IP(IP){};
+    UnknownInstruction(uint8_t OP, InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata)
+    : Instruction(instructionFactory, IP, flashMemory, xdata),OP(OP){ }
     virtual ~UnknownInstruction() = default;
 
 public:
     virtual std::shared_ptr<Instruction> cycle() override;
 private:
-    InstructionFactory &instructionFactory;
     uint8_t OP;
-    uint32_t &IP;
-
 };
 
 
