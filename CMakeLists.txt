@@ -10,7 +10,7 @@ add_library(instruction_lib OBJECT
         instruction/Instruction.cpp
         instruction/InstructionFactory.cpp
         instruction/UnknownInstruction.cpp
-        )
+        instruction/RegistryUtil.cpp instruction/RegistryUtil.h)
 
 
 add_library(loader_lib OBJECT

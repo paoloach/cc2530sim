@@ -18,6 +18,11 @@ public:
         return std::bitset<8>(value)[index];
     }
 
+    virtual void setBit(int index, bool binValue){
+        auto bits = std::bitset<8>(value);
+        bits[index] = binValue;
+    }
+
     virtual void setValue(uint8_t newValue){
         value = newValue;
     }

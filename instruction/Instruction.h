@@ -10,6 +10,8 @@
 #include <memory>
 #include "Instructions.h"
 #include "../FlashMemory.h"
+#include "../Registers.h"
+#include "RegistryUtil.h"
 #include <iostream>
 #include <iomanip>
 
@@ -21,20 +23,21 @@ class Instruction {
 public:
     Instruction(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata)
     : instructionFactory(
-            instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(1) { }
+            instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(1),registryUtil(xdata) { }
 
     Instruction(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata,int cycleCounter)
             : instructionFactory(
-            instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(cycleCounter) { }
+            instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(cycleCounter),registryUtil(xdata) { }
 
     virtual ~Instruction() = default;
 
     virtual std::shared_ptr<Instruction> cycle() = 0;
 protected:
     InstructionFactory &instructionFactory;
-    uint32_t &IP;
     FlashMemory &flashMemory;
+    uint32_t &IP;
     XData &xdata;
+    RegistryUtil registryUtil;
     int cycleCounter;
 };
 
