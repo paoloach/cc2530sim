@@ -154,6 +154,19 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ORL_A_DATA>::cycle() {
 }
 
 template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        cycleCounter=1;
+        xdata[Register::A].setValue(0);
+        IP++;
+        std::cout << "CLR A"<< std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
@@ -185,6 +198,24 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
         xdata[DPL] =  dplVal;
         IP++;
         std::cout << "MOV DPTR,0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)dphVal << (uint)dplVal << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::MOVC_A_DPTR>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        cycleCounter=3;
+        IP++;
+        uint16_t dph = xdata[registryUtil.getDPH()].getValue();
+        uint16_t dpl = xdata[registryUtil.getDPL()].getValue();
+        uint16_t dp = (dph << 8) | dpl;
+        auto regA = xdata[Register::A];
+        uint8_t val = flashMemory[dp];
+        regA.setValue(regA.getValue()+val);
+        std::cout << "MOVC A,@A+DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ")" << std::endl;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
