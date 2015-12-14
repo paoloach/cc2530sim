@@ -30,7 +30,10 @@ enum class Instructions {
     ANL_A_DATA=0x54,
     MOV_DATA_DIRECT=0x75,
     MOV_RN_DATA=0x78,
+    SJMP=0x80,
+    MOV_DPTR_DATA=0x90,
     CJNE_RN_DATA=0xB8,
+    DJNZ_RN=0xD8,
     MOV_A_DIRECT=0xE5,
     MOV_DIRECT_A=0xF5
 

@@ -14,6 +14,8 @@ public:
     RegistryUtil(XData & xData):xData(xData){}
 public:
     uint16_t  getRAddress(uint8_t opcode);
+    uint16_t  getDPH();
+    uint16_t  getDPL();
 private:
     XData & xData;
 };

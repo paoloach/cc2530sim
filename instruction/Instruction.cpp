@@ -170,6 +170,26 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
 }
 
 template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        cycleCounter=3;
+        IP++;
+        uint8_t  dphVal =flashMemory[IP];
+        uint16_t DPH=registryUtil.getDPH();
+        xdata[DPH] =  dphVal;
+        IP++;
+        uint8_t  dplVal =flashMemory[IP];
+        uint16_t DPL=registryUtil.getDPL();
+        xdata[DPL] =  dplVal;
+        IP++;
+        std::cout << "MOV DPTR,0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)dphVal << (uint)dplVal << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::CJNE_RN_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
@@ -191,6 +211,44 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CJNE_RN_DATA>::cycle() {
         }
 
         std::cout << "CJNE R" << (rAddress & 0x7) <<", 0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)data << ", " << std::dec << (int)relAddr << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::DJNZ_RN>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        cycleCounter=3;
+        uint16_t regAddress = registryUtil.getRAddress(flashMemory[IP]);
+        IP++;
+        int8_t relAddr = flashMemory[IP];
+        IP++;
+        uint8_t rn= xdata[regAddress].getValue();
+        rn--;
+        xdata[regAddress].setValue(rn);
+        if (rn != 0){
+            IP += relAddr;
+        }
+
+        std::cout << "DJNZ R" << (regAddress & 0x7) << "," << std::dec << (int)relAddr << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::SJMP>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        cycleCounter=3;
+        IP++;
+        int8_t relAddr = flashMemory[IP];
+        IP++;
+        IP += relAddr;
+
+        std::cout << "SJMP AT 0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)IP  << std::endl;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
