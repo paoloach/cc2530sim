@@ -7,6 +7,6 @@
 
 XData::XData() {
     for (int i = 0; i < 0x10000; i++) {
-        data.push_back(std::make_shared<MemoryLocation>());
+        data.push_back(std::make_shared<MemoryLocation>(i));
     }
 }
