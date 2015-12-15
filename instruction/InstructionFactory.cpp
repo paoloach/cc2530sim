@@ -30,8 +30,26 @@ InstructionFactory::InstructionFactory(uint32_t &IP, FlashMemory &flashMemory, X
     decodeMap[0x7E] = std::make_shared<InstrTempl<Instructions::MOV_RN_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0x7F] = std::make_shared<InstrTempl<Instructions::MOV_RN_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0x80] = std::make_shared<InstrTempl<Instructions::SJMP>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x88] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x89] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8A] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8B] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8C] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8D] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8E] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x8F] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
+
     decodeMap[0x90] = std::make_shared<InstrTempl<Instructions::MOV_DPTR_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0x93] = std::make_shared<InstrTempl<Instructions::MOVC_A_DPTR>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xA3] = std::make_shared<InstrTempl<Instructions::INC_DPTR>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xA8] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xA9] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAA] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAB] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAC] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAD] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAE] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xAF] = std::make_shared<InstrTempl<Instructions::MOV_RN_DIRECT>>(*this, IP, flashMemory,xdata);
     decodeMap[0xB8] = std::make_shared<InstrTempl<Instructions::CJNE_RN_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0xB9] = std::make_shared<InstrTempl<Instructions::CJNE_RN_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0xBA] = std::make_shared<InstrTempl<Instructions::CJNE_RN_DATA>>(*this, IP, flashMemory,xdata);
@@ -50,6 +68,7 @@ InstructionFactory::InstructionFactory(uint32_t &IP, FlashMemory &flashMemory, X
     decodeMap[0xDF] = std::make_shared<InstrTempl<Instructions::DJNZ_RN>>(*this, IP, flashMemory,xdata);
     decodeMap[0xE4] = std::make_shared<InstrTempl<Instructions::CLR_A>>(*this, IP, flashMemory,xdata);
     decodeMap[0xE5] = std::make_shared<InstrTempl<Instructions::MOV_A_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0xF0] = std::make_shared<InstrTempl<Instructions::MOVX_A_AT_DPTR>>(*this, IP, flashMemory,xdata);
     decodeMap[0xF5] = std::make_shared<InstrTempl<Instructions::MOV_DIRECT_A>>(*this, IP, flashMemory,xdata);
 
 }

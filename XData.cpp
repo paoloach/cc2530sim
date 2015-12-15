@@ -5,6 +5,8 @@
 
 #include "XData.h"
 
-XData::XData():data(0x10000) {
-
+XData::XData() {
+    for (int i = 0; i < 0x10000; i++) {
+        data.push_back(std::make_shared<MemoryLocation>());
+    }
 }

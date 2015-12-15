@@ -31,12 +31,16 @@ enum class Instructions {
     MOV_DATA_DIRECT=0x75,
     MOV_RN_DATA=0x78,
     SJMP=0x80,
+    MOV_DIRECT_RN=0x88,
     MOV_DPTR_DATA=0x90,
     MOVC_A_DPTR=0x93,
     CJNE_RN_DATA=0xB8,
+    INC_DPTR=0xA3,
+    MOV_RN_DIRECT=0xA8,
     DJNZ_RN=0xD8,
     CLR_A=0xE4,
     MOV_A_DIRECT=0xE5,
+    MOVX_A_AT_DPTR=0xF0,
     MOV_DIRECT_A=0xF5
 
 };

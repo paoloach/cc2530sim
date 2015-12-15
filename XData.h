@@ -7,6 +7,7 @@
 #define CC2530SIM_XDATA_H
 
 #include <vector>
+#include <memory>
 #include "MemoryLocation.h"
 #include "Registers.h"
 
@@ -14,15 +15,15 @@ class XData {
 public:
     XData();
 public:
-    MemoryLocation & operator[](uint16_t index) {
+    std::shared_ptr<MemoryLocation> & operator[](uint16_t index) {
         return data[index];
     }
 
-    MemoryLocation & operator[](Register reg){
+    std::shared_ptr<MemoryLocation>  operator[](Register reg){
         return data[static_cast<uint16_t>(reg)];
     }
 private:
-    std::vector<MemoryLocation> data;
+    std::vector<std::shared_ptr<MemoryLocation>> data;
 };
 
 
