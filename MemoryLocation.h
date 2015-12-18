@@ -20,7 +20,7 @@ public:
     }
     MemoryLocation(uint16_t address, uint8_t value):value(value),address(address){
         std::stringstream stream;
-        stream << std::setw(4) << std::setfill('0') << std::hex << address;
+        stream << "0x" << std::setw(4) << std::setfill('0') << std::hex << address;
         name = stream.str();
     }
 
