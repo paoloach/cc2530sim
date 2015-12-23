@@ -15,6 +15,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include "InstructionFactory.h"
 class InstructionFactory;
 class FlashMemory;
 class XData;
@@ -49,7 +50,55 @@ public:
     InstrTempl(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata, int cycleCount):
             Instruction(instructionFactory, IP, flashMemory, xdata,cycleCount){}
 
-    std::shared_ptr<Instruction> cycle() {
+    std::shared_ptr<Instruction> cycle()  override{
+        auto OP = flashMemory[IP];
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        exit(-1);
+    }
+};
+
+template <Instructions E>
+class InstrTemp2: public Instruction{
+public:
+    InstrTemp2(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+            Instruction(instructionFactory, IP, flashMemory, xdata,2){}
+
+    std::shared_ptr<Instruction> cycle() override {
+        if (cycleCounter>0){
+            cycleCounter--;
+        } else {
+            cycleCounter=2;
+            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            execution();
+        }
+        return instructionFactory.decode(flashMemory[IP]);
+    }
+
+    std::shared_ptr<Instruction> execution() {
+        auto OP = flashMemory[IP];
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        exit(-1);
+    }
+};
+
+template <Instructions E>
+class InstrTemp1: public Instruction{
+public:
+    InstrTemp1(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+            Instruction(instructionFactory, IP, flashMemory, xdata,1){}
+
+    std::shared_ptr<Instruction> cycle() override {
+        if (cycleCounter>0){
+            cycleCounter--;
+        } else {
+            cycleCounter=1;
+            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            execution();
+        }
+        return instructionFactory.decode(flashMemory[IP]);
+    }
+
+    void execution() {
         auto OP = flashMemory[IP];
         std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
         exit(-1);

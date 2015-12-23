@@ -4,6 +4,7 @@
 //
 
 #include "CPU.h"
+#include "instruction/Instruction.h"
 
 CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(IP, flashMemory,xdata){
     IP=0;

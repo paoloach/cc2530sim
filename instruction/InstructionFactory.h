@@ -9,10 +9,11 @@
 
 #include <stdint.h>
 #include <memory>
-#include "Instruction.h"
 #include "../FlashMemory.h"
 #include "../MemoryLocation.h"
 #include "../XData.h"
+
+class Instruction;
 
 class InstructionFactory {
 public:

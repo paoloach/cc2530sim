@@ -20,6 +20,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=2;
         IP++;
         uint8_t data = flashMemory[IP];
@@ -35,6 +36,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DATA_DIRECT>::cycle() 
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         uint8_t address = flashMemory[IP];
@@ -52,6 +54,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LJMP>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         IP = flashMemory[IP]*256 + flashMemory[IP+1];
@@ -66,6 +69,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::JMP_A_DPTR>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=2;
         uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
         uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
@@ -82,6 +86,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LCALL>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=6;
         IP++;
         uint16_t newAddress = flashMemory[IP]*256;
@@ -106,6 +111,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RET>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=4;
         uint16_t spAddress = xdata[Register::SP]->getValue();
         uint32_t hiIP = xdata[spAddress]->getValue();
@@ -121,11 +127,15 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RET>::cycle() {
     return instructionFactory.decode(flashMemory[IP]);
 }
 
+
+
+
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DIRECT>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=2;
         IP++;
         uint8_t address = flashMemory[IP];
@@ -143,6 +153,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_A>::cycle() {
         cycleCounter--;
     } else {
         cycleCounter=2;
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         IP++;
         uint8_t address = flashMemory[IP];
         uint8_t data = xdata[Register::A]->getValue();
@@ -158,6 +169,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ANL_A_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=2;
         IP++;
         uint8_t data = flashMemory[IP];
@@ -174,6 +186,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ORL_A_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=2;
         IP++;
         uint8_t data = flashMemory[IP];
@@ -190,6 +203,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=1;
         xdata[Register::A]->setValue(0);
         IP++;
@@ -203,6 +217,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DIRECT>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=4;
         uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
         IP++;
@@ -220,6 +235,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_RN>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
         IP++;
@@ -237,6 +253,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=1;
         uint16_t address = registryUtil.getRAddress(flashMemory[IP]);
         IP++;
@@ -253,6 +270,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         uint8_t  dphVal =flashMemory[IP];
@@ -273,15 +291,16 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVC_A_DPTR>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
         uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
         uint16_t dp = (dph << 8) | dpl;
         auto regA = xdata[Register::A];
-        uint8_t val = flashMemory[dp];
-        regA->setValue(regA->getValue()+val);
-        std::cout << "MOVC A,@A+DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ")" << std::endl;
+        uint8_t val = flashMemory[dp+regA->getValue()];
+        regA->setValue(val);
+        std::cout << "MOVC A,@A+DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ", A = " << (int)regA->getValue() << ")" << std::endl;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -292,6 +311,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
@@ -310,6 +330,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CJNE_RN_DATA>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=4;
         uint16_t rAddress = registryUtil.getRAddress(flashMemory[IP]);
         IP++;
@@ -336,6 +357,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::DJNZ_RN>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         uint16_t regAddress = registryUtil.getRAddress(flashMemory[IP]);
         IP++;
@@ -358,6 +380,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::SJMP>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=3;
         IP++;
         int8_t relAddr = flashMemory[IP];
@@ -376,6 +399,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::INC_DPTR>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=1;
         IP++;
         uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
@@ -395,6 +419,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::PUSH>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=4;
         uint16_t spAddress = xdata[Register::SP]->getValue();
         spAddress++;
@@ -406,6 +431,46 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::PUSH>::cycle() {
         IP++;
 
         std::cout << "push " << mem->getName() << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::POP>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+        cycleCounter=4;
+        uint16_t spAddress = xdata[Register::SP]->getValue();
+        IP++;
+        uint8_t address = flashMemory[IP];
+        auto mem = xdata[address];
+        mem->setValue( xdata[spAddress]->getValue());
+        spAddress--;
+        xdata[Register::SP]->setValue(spAddress);
+        IP++;
+
+        std::cout << "pop " << mem->getName() << std::endl;
+    }
+    return instructionFactory.decode(flashMemory[IP]);
+}
+
+template<>
+std::shared_ptr<Instruction> InstrTempl<Instructions::RL_A>::cycle() {
+    if (cycleCounter>0){
+        cycleCounter--;
+    } else {
+        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+        cycleCounter=1;
+        uint16_t regA = xdata[Register::A]->getValue();
+        regA = regA << 1;
+        if (regA & 0x100){
+            regA |= 1;
+        }
+        xdata[Register::A]->setValue(regA);
+        IP++;
+        std::cout << "RL A" << std::endl;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
