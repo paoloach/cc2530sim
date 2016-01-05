@@ -474,3 +474,4 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RL_A>::cycle() {
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
+
