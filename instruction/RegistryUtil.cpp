@@ -24,3 +24,11 @@ uint16_t RegistryUtil::getDPL() {
         return (uint16_t)Register::DPL0;
     }
 }
+
+uint16_t RegistryUtil::getXAddressFromBitAddress(uint8_t bitAddress) {
+    uint8_t reg = bitAddress / 8;
+    if (reg <=15){
+        return 0x20 + reg;
+    }
+    return reg*8;
+}

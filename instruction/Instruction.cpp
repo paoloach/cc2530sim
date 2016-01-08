@@ -475,3 +475,23 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RL_A>::cycle() {
     return instructionFactory.decode(flashMemory[IP]);
 }
 
+template<>
+void InstrTemp3<Instructions::CLR_BIT>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[bitAddress];
+    xAddress->setBit(bit, false);
+    IP++;
+    std::cout << "CLR BIT " << bit << " of [" << xAddress->getName() << "]" << std::endl;
+}
+
+template<>
+void InstrTemp1<Instructions::CLR_C>::execution() {
+    IP++;
+    auto statusWord = xdata[Register::PSW];
+    statusWord->setBit(7,false);
+    std::cout << "CLR C " << std::endl;
+}
