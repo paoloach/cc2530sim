@@ -46,6 +46,12 @@ enum class Instructions {
     MOV_DIRECT_RN=0x88,
     MOV_DPTR_DATA=0x90,
     MOVC_A_DPTR=0x93,
+
+    SUBB_A_DATA=0x94,
+    SUBB_A_DIRECT=0x95,
+    SUBB_A_AT_RN=0x96,
+    SUBB_A_RN=0x98,
+
     CJNE_RN_DATA=0xB8,
     INC_DPTR=0xA3,
     MOV_RN_DIRECT=0xA8,

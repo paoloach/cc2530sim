@@ -18,7 +18,7 @@ void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A <-- A  + 0x" << std::setfill('0') << std::setw(2) << std::hex << (uint) data << std::endl;
+    std::cout << "A(" << (newValue & 0xFF) << ") <-- A  + 0x" << std::setfill('0') << std::setw(2) << std::hex << (((uint) data) & 0xFF) << std::endl;
 }
 
 
@@ -81,20 +81,21 @@ void InstrTemp2<Instructions::ADDC_A_DATA>::execution() {
     int8_t data = flashMemory[IP];
     int8_t REG_A = xdata[Register::A]->getValue();
     bool carry = statusWord->getBit(7);
-    int16_t newValue = data + REG_A + carry ? 1 : 0;
+    int16_t newValue = data + REG_A + carry;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A <-- A  ";
+    std::cout << "A (" << newValue << ") <-- A + carry ";
     if (data >= 0) {
         std::cout << " + ";
     } else {
         std::cout << " - ";
+        data = - data;
     }
-    std::cout << std::setfill('0') << std::setw(2) << std::hex << (uint) (-data) << " + carry" << std::endl;
+    std::cout << std::setfill('0') << std::setw(2) << std::hex << (uint)data << std::endl;
 }
 
 
@@ -125,7 +126,7 @@ void InstrTemp2<Instructions::ADDC_A_AT_RN>::execution() {
     auto statusWord = xdata[Register::PSW];
     bool carry = statusWord->getBit(7);
     int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = xMem->getValue() + REG_A+ carry ? 1 : 0;
+    int16_t newValue = xMem->getValue() + REG_A+ carry;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
@@ -142,7 +143,7 @@ void InstrTemp2<Instructions::ADDC_A_DIRECT>::execution() {
     auto statusWord = xdata[Register::PSW];
     bool carry = statusWord->getBit(7);
     int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = data + REG_A+ carry ? 1 : 0;
+    int16_t newValue = data + REG_A+ carry;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
