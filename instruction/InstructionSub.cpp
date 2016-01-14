@@ -19,7 +19,7 @@ void InstrTemp2<Instructions::SUBB_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A (" << newValue << ") <-- A - C ";
+    std::cout << "A(=" << newValue << ") <-- A - C ";
     if (data >= 0) {
         std::cout << " - ";
     } else {
@@ -43,7 +43,7 @@ void InstrTemp1<Instructions::SUBB_A_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A(" << newValue <<") <-- A - C - R" + Raddress << std::endl;
+    std::cout << "A(=" << newValue <<") <-- A - C - R" + Raddress << std::endl;
 }
 
 template<>
@@ -62,7 +62,7 @@ void InstrTemp2<Instructions::SUBB_A_AT_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A(" <<newValue<<") <-- A  - carry - R" << Raddress << "([" << xMem->getName() << "])" << std::endl;
+    std::cout << "A(=" <<newValue<<") <-- A  - carry - R" << Raddress << "([" << xMem->getName() << "])" << std::endl;
 }
 
 template<>
@@ -80,6 +80,6 @@ void InstrTemp2<Instructions::SUBB_A_DIRECT>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(";
+    std::cout << "A(=";
     std::cout << (newValue&0xFF) <<") <-- A  - carry - [" << address->getName() << "]" << std::endl;
 }

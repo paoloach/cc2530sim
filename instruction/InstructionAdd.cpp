@@ -18,7 +18,7 @@ void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(" << (newValue & 0xFF) << ") <-- A  + 0x" << std::setfill('0') << std::setw(2) << std::hex << (((uint) data) & 0xFF) << std::endl;
+    std::cout << "A(=" << (newValue & 0xFF) << ") <-- A  + 0x" << std::setfill('0') << std::setw(2) << std::hex << (((uint) data) & 0xFF) << std::endl;
 }
 
 
@@ -88,7 +88,7 @@ void InstrTemp2<Instructions::ADDC_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A (" << newValue << ") <-- A + carry ";
+    std::cout << "A(=" << newValue << ") <-- A + carry ";
     if (data >= 0) {
         std::cout << " + ";
     } else {

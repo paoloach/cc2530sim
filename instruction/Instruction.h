@@ -57,6 +57,29 @@ public:
     }
 };
 
+template <Instructions E>
+class InstrTemp4: public Instruction{
+public:
+    InstrTemp4(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+            Instruction(instructionFactory, IP, flashMemory, xdata,4){}
+
+    std::shared_ptr<Instruction> cycle() override {
+        if (cycleCounter>0){
+            cycleCounter--;
+        } else {
+            cycleCounter=4;
+            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            execution();
+        }
+        return instructionFactory.decode(flashMemory[IP]);
+    }
+
+    void execution() {
+        auto OP = flashMemory[IP];
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        exit(-1);
+    }
+};
 
 template <Instructions E>
 class InstrTemp3: public Instruction{

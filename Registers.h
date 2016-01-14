@@ -19,6 +19,7 @@ enum class Register {
     DPS=0x92,
     P2=0xA0,
     IEN0=0xA8,
+    T1STAT=0xAF,
     IEN1=0xB8,
 
     PSW=0xD0,
