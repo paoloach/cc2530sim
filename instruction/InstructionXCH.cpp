@@ -1,6 +1,8 @@
 //
 // Created by developer on 1/5/16.
 //
+#include <boost/log/trivial.hpp>
+#include <sstream>
 #include <stdint.h>
 #include "Instruction.h"
 
@@ -13,7 +15,7 @@ void InstrTemp3<Instructions::XCH_A_DIRECT>::execution() {
     xdata[Register::A]->setValue(data);
     address->setValue(REG_A);
     IP++;
-    std::cout << "A <-> [" << address->getName() <<"]"  << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-> [" << address->getName() <<"]";
 }
 
 template<>
@@ -26,7 +28,7 @@ void InstrTemp3<Instructions::XCH_A_AT_RN>::execution() {
     int8_t REG_A = xdata[Register::A]->getValue();
     xdata[Register::A]->setValue(xMem->getValue());
     xMem->setValue(REG_A);
-    std::cout << "A <-> @R" << Raddress  << "([" << xMem->getName() << "])" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-> @R" << Raddress  << "([" << xMem->getName() << "])";
 }
 
 
@@ -38,5 +40,5 @@ void InstrTemp2<Instructions::XCH_A_RN>::execution() {
     int8_t REG_A = xdata[Register::A]->getValue();
     xdata[Register::A]->setValue(rn->getValue());
     rn->setValue(REG_A);
-    std::cout << "A <-> R" + Raddress << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-> R" + Raddress;
 }

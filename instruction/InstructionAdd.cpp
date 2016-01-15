@@ -2,8 +2,9 @@
 // Created by developer on 12/21/15.
 //
 #include <stdint.h>
+#include <sstream>
 #include "Instruction.h"
-
+#include <boost/log/trivial.hpp>
 
 template<>
 void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
@@ -18,7 +19,7 @@ void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(=" << (newValue & 0xFF) << ") <-- A  + 0x" << std::setfill('0') << std::setw(2) << std::hex << (((uint) data) & 0xFF) << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A(=" << (newValue & 0xFF) << ") <-- A  + 0x"  << (((uint) data) & 0xFF);
 }
 
 
@@ -35,7 +36,7 @@ void InstrTemp1<Instructions::ADD_A_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A <-- A  + R" + Raddress << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  + R" << Raddress;
 }
 
 template<>
@@ -53,7 +54,7 @@ void InstrTemp2<Instructions::ADD_A_AT_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A <-- A  +@R" << Raddress << "([" << xMem->getName() << "])" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  +@R" << Raddress << "([" << xMem->getName() << "])";
 }
 
 template<>
@@ -70,7 +71,7 @@ void InstrTemp2<Instructions::ADD_A_DIRECT>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A <-- A  + [" << address->getName() << "] + carry" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  + [" << address->getName() << "] + carry";
 }
 
 
@@ -88,14 +89,16 @@ void InstrTemp2<Instructions::ADDC_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(=" << newValue << ") <-- A + carry ";
+    std::stringstream log;
+    log << "A(=" << newValue << ") <-- A + carry ";
     if (data >= 0) {
-        std::cout << " + ";
+        log << " + ";
     } else {
-        std::cout << " - ";
+        log << " - ";
         data = - data;
     }
-    std::cout << std::setfill('0') << std::setw(2) << std::hex << (uint)data << std::endl;
+     log << std::setfill('0') << std::setw(2) << std::hex << (uint)data;
+    BOOST_LOG_TRIVIAL(debug) << log.str();
 }
 
 
@@ -113,7 +116,7 @@ void InstrTemp1<Instructions::ADDC_A_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A <-- A  + R+carry" + Raddress << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  + R" << Raddress << " + carry";
 }
 
 template<>
@@ -132,7 +135,7 @@ void InstrTemp2<Instructions::ADDC_A_AT_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A <-- A  +@R +carry" << Raddress << "([" << xMem->getName() << "])" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  +@R +carry" << Raddress << "([" << xMem->getName() << "])";
 }
 
 template<>
@@ -150,5 +153,5 @@ void InstrTemp2<Instructions::ADDC_A_DIRECT>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A <-- A  + [" << address->getName() << "] + carry" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A <-- A  + [" << address->getName() << "] + carry";
 }

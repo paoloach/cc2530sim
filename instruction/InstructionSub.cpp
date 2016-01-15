@@ -1,7 +1,8 @@
 //
 // Created by developer on 1/8/16.
 //
-
+#include <boost/log/trivial.hpp>
+#include <sstream>
 #include <stdint.h>
 #include "Instruction.h"
 
@@ -19,14 +20,16 @@ void InstrTemp2<Instructions::SUBB_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(=" << newValue << ") <-- A - C ";
+    std::stringstream ss;
+    ss<< "A(=" << newValue << ") <-- A - C ";
     if (data >= 0) {
-        std::cout << " - ";
+        ss << " - ";
     } else {
-        std::cout << " + ";
+        ss << " + ";
         data = -data;
     }
-    std::cout << std::setfill('0') << std::setw(2) << std::hex << (uint) data << " + carry" << std::endl;
+    ss << std::setfill('0') << std::setw(2) << std::hex << (uint) data << " + carry" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << ss.str();
 }
 
 template<>
@@ -43,7 +46,7 @@ void InstrTemp1<Instructions::SUBB_A_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A(=" << newValue <<") <-- A - C - R" + Raddress << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "A(=" << newValue <<") <-- A - C - R" + Raddress;
 }
 
 template<>
@@ -62,7 +65,7 @@ void InstrTemp2<Instructions::SUBB_A_AT_RN>::execution() {
     statusWord->setBit(7, carry);
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
-    std::cout << "A(=" <<newValue<<") <-- A  - carry - R" << Raddress << "([" << xMem->getName() << "])" << std::endl;
+    BOOST_LOG_TRIVIAL(debug)  << "A(=" <<newValue<<") <-- A  - carry - R" << Raddress << "([" << xMem->getName() << "])";
 }
 
 template<>
@@ -80,6 +83,5 @@ void InstrTemp2<Instructions::SUBB_A_DIRECT>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    std::cout << "A(=";
-    std::cout << (newValue&0xFF) <<") <-- A  - carry - [" << address->getName() << "]" << std::endl;
+    BOOST_LOG_TRIVIAL(debug)  << "A(=" << (newValue&0xFF) <<") <-- A  - carry - [" << address->getName() << "]";
 }

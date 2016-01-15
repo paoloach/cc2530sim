@@ -2,7 +2,8 @@
 // Created by Paolo Achdjian on 11/23/15.
 // Copyright (c) 2015  Paolo Achdjian All rights reserved.
 //
-
+#include <boost/log/trivial.hpp>
+#include <sstream>
 #include <stdint.h>
 #include "Instruction.h"
 #include "InstructionFactory.h"
@@ -26,7 +27,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DATA>::cycle() {
         uint8_t data = flashMemory[IP];
         IP++;
         xdata[Register::A]->setValue(data);
-        std::cout << "move A <-- 0x" <<   std::setw(2) <<(uint)data << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "move A <-- 0x"  <<(uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -44,7 +45,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DATA_DIRECT>::cycle() 
         uint8_t data = flashMemory[IP];
         IP++;
         xdata[address]->setValue(data);
-        std::cout << "move [" << xdata[address]->getName()<< "] <-- 0x" <<   std::setw(2) <<(uint)data << std::endl;
+        BOOST_LOG_TRIVIAL(debug)  << "move [" << xdata[address]->getName()<< "] <-- 0x" <<  (uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -66,7 +67,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DIRECT>::cycle() {
         uint8_t data = xdata[address]->getValue();
         xdata[Register::A]->setValue(data);
         IP++;
-        std::cout << "A <-- [" << xdata[address]->getName() << "]" << std::endl;
+        BOOST_LOG_TRIVIAL(debug)  << "A <-- [" << xdata[address]->getName() << "]";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -83,7 +84,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_A>::cycle() {
         uint8_t data = xdata[Register::A]->getValue();
         xdata[address]->setValue(data);
         IP++;
-        std::cout << "[" <<xdata[address]->getName() << "] <-- A" << std::endl;
+        BOOST_LOG_TRIVIAL(debug)  << "[" <<xdata[address]->getName() << "] <-- A";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -100,7 +101,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ANL_A_DATA>::cycle() {
         uint8_t REG_A = xdata[Register::A]->getValue();
         xdata[Register::A]->setValue(data & REG_A);
         IP++;
-        std::cout << "A <-- A  & 0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)data << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "A <-- A  & " << (uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -117,7 +118,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ORL_A_DATA>::cycle() {
         uint8_t REG_A = xdata[Register::A]->getValue();
         xdata[Register::A]->setValue(data | REG_A);
         IP++;
-        std::cout << "A <-- A  | 0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)data << std::endl;
+        BOOST_LOG_TRIVIAL(debug)<< "A <-- A  | "  << (uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -131,7 +132,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
         cycleCounter=1;
         xdata[Register::A]->setValue(0);
         IP++;
-        std::cout << "CLR A"<< std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "CLR A";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -149,7 +150,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DIRECT>::cycle() {
         uint8_t data = xdata[address]->getValue();
         xdata[Raddress]->setValue(data);
         IP++;
-        std::cout << "R" << (Raddress & 0x7) << " <--  [" << xdata[address]->getName() << "]" << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "R" << (Raddress & 0x7) << " <--  [" << xdata[address]->getName() << "]";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -167,7 +168,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_RN>::cycle() {
         uint8_t data = xdata[Raddress]->getValue();
         xdata[address]->setValue(data);
         IP++;
-        std::cout << "[" << xdata[address]->getName() << "] <-- R" << (Raddress & 0x7) << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "[" << xdata[address]->getName() << "] <-- R" << (Raddress & 0x7);
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -184,7 +185,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
         uint8_t data = flashMemory[IP];
         xdata[address]->setValue(data);
         IP++;
-        std::cout << "R" << (address & 0x7) << " <--  0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)data << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "R" << (address & 0x7) << " <--  "  << (uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -205,7 +206,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
         uint16_t DPL=registryUtil.getDPL();
         xdata[DPL]->setValue( dplVal);
         IP++;
-        std::cout << "MOV DPTR,0x" << std::setfill('0')  << std::setw(2) << std::hex << (uint)dphVal << (uint)dplVal << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "MOV DPTR," << (uint)dphVal << (uint)dplVal;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -224,7 +225,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVC_A_DPTR>::cycle() {
         auto regA = xdata[Register::A];
         uint8_t val = flashMemory[dp+regA->getValue()];
         regA->setValue(val);
-        std::cout << "MOVC A,@A+DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ", A = " << (int)regA->getValue() << ")" << std::endl;
+        BOOST_LOG_TRIVIAL(debug) <<  "MOVC A,@A+DPTR (dptr=" << dp << ", A = " << (int)regA->getValue() << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -244,7 +245,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
         auto regA = xdata[Register::A];
         uint8_t val = xdata[dp]->getValue();
         regA->setValue(val);
-        std::cout << "MOVX A,@DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ")" << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "MOVX A,@DPTR (dptr=" <<  dp << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -266,7 +267,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::INC_DPTR>::cycle() {
         dp++;
         xdata[registryUtil.getDPH()]->setValue( (dp & 0xFF00) >> 8);
         xdata[registryUtil.getDPL()]->setValue(dp & 0xFF);
-        std::cout << "INC DPTR (dptr=" << std::setfill('0')  << std::setw(4) << std::hex << dp << ")" << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "INC DPTR (dptr=" << dp << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -288,7 +289,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::PUSH>::cycle() {
         xdata[Register::SP]->setValue(spAddress);
         IP++;
 
-        std::cout << "push " << mem->getName() << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "push " << mem->getName();
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -309,7 +310,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::POP>::cycle() {
         xdata[Register::SP]->setValue(spAddress);
         IP++;
 
-        std::cout << "pop " << mem->getName() << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "pop " << mem->getName();
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -328,7 +329,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RL_A>::cycle() {
         }
         xdata[Register::A]->setValue(regA);
         IP++;
-        std::cout << "RL A" << std::endl;
+        BOOST_LOG_TRIVIAL(debug) << "RL A";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -343,7 +344,7 @@ void InstrTemp3<Instructions::CLR_BIT>::execution() {
     auto xAddress = xdata[bitAddress];
     xAddress->setBit(bit, false);
     IP++;
-    std::cout << "CLR BIT " << bit << " of [" << xAddress->getName() << "]" << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "CLR BIT " << bit << " of [" << xAddress->getName() << "]";
 }
 
 template<>
@@ -351,6 +352,6 @@ void InstrTemp1<Instructions::CLR_C>::execution() {
     IP++;
     auto statusWord = xdata[Register::PSW];
     statusWord->setBit(7,false);
-    std::cout << "CLR C " << std::endl;
+    BOOST_LOG_TRIVIAL(debug) << "CLR C ";
 }
 
