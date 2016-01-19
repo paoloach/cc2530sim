@@ -8,6 +8,7 @@
 #include "registers/DPH0.h"
 #include "registers/Acc.h"
 #include "registers/FMAP.h"
+#include "registers/SP.h"
 #include "registers/P0.h"
 #include "registers/P1.h"
 #include "registers/P2.h"
@@ -25,6 +26,7 @@ XData::XData() {
     data[static_cast<uint16_t>(Register::P0)] = std::make_shared<P0>();
     data[0x82] = std::make_shared<DPL0>();
     data[0x83] = std::make_shared<DPH0>();
+    data[static_cast<uint16_t>(Register::SP)] = std::make_shared<SP>();
     data[static_cast<uint16_t>(Register::P1)] = std::make_shared<P1>();
     data[static_cast<uint16_t>(Register::TCON)] = std::make_shared<TCON>();
     data[static_cast<uint16_t>(Register::S0CON)] = std::make_shared<S0CON>();

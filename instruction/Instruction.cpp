@@ -48,27 +48,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DATA_DIRECT>::cycle() 
 }
 
 
-
-
-
-
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DIRECT>::cycle() {
-    if (cycleCounter>0){
-        cycleCounter--;
-    } else {
-        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
-        cycleCounter=2;
-        IP++;
-        uint8_t address = flashMemory[IP];
-        uint8_t data = xdata[address]->getValue();
-        xdata[Register::A]->setValue(data);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug)  << "A <-- [" << xdata[address]->getName() << "]";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
-
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_A>::cycle() {
     if (cycleCounter>0){
