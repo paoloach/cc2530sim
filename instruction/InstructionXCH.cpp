@@ -40,5 +40,5 @@ void InstrTemp2<Instructions::XCH_A_RN>::execution() {
     int8_t REG_A = xdata[Register::A]->getValue();
     xdata[Register::A]->setValue(rn->getValue());
     rn->setValue(REG_A);
-    BOOST_LOG_TRIVIAL(debug) << "A <-> R" + Raddress;
+    BOOST_LOG_TRIVIAL(debug) << "A <-> R" << Raddress;
 }

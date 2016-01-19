@@ -147,7 +147,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DIRECT>::cycle() {
         uint8_t data = xdata[address]->getValue();
         xdata[Raddress]->setValue(data);
         IP++;
-        BOOST_LOG_TRIVIAL(debug) << "R" << (Raddress & 0x7) << " <--  [" << xdata[address]->getName() << "]";
+        BOOST_LOG_TRIVIAL(debug) << "MOV R" << (Raddress & 0x7) << " <--  [" << xdata[address]->getName() << "]";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -166,7 +166,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
         uint8_t data = flashMemory[IP];
         xdata[address]->setValue(data);
         IP++;
-        BOOST_LOG_TRIVIAL(debug) << "R" << (address & 0x7) << " <--  "  << (uint)data;
+        BOOST_LOG_TRIVIAL(debug) << "MOV R" << (address & 0x7) << " <--  "  << (uint)data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
