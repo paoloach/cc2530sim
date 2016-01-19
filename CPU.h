@@ -21,7 +21,7 @@ public:
 private:
     FlashMemory & flashMemory;
     XData xdata;
-    uint32_t IP;
+    InstructionPointer IP;
     InstructionFactory instructionFactory;
     std::shared_ptr<Instruction> currentInstruct;
 };

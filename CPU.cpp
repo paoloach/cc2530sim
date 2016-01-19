@@ -7,7 +7,6 @@
 #include "instruction/Instruction.h"
 
 CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(IP, flashMemory,xdata){
-    IP=0;
 }
 
 void CPU::click() {
@@ -15,6 +14,6 @@ void CPU::click() {
 }
 
 void CPU::reset() {
-    IP=0;
+    IP.reset();
     currentInstruct = instructionFactory.decode(flashMemory[IP]);
 }

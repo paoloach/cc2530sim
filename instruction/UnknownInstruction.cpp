@@ -10,7 +10,7 @@
 
 std::shared_ptr<Instruction> UnknownInstruction::cycle() {
     std::stringstream ss;
-    ss << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP;
+    ss << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " << IP;
     BOOST_LOG_TRIVIAL(error) << ss.str();
     exit(-1);
     return instructionFactory.decode(OP);

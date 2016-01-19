@@ -10,11 +10,11 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LJMP>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
     } else {
-        BOOST_LOG_TRIVIAL(debug) << IP <<"  ";
+        std::cout << IP <<"  ";
         cycleCounter=3;
         IP++;
-        IP = flashMemory[IP]*256 + flashMemory[IP+1];
-        BOOST_LOG_TRIVIAL(debug) << "LJMP (at " <<  (uint)IP << ")";
+        IP.set(flashMemory[IP]*256 + flashMemory[IP+1]);
+        BOOST_LOG_TRIVIAL(debug) << "LJMP (at " <<  IP << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -31,8 +31,8 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::JMP_A_DPTR>::cycle() {
         uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
         uint16_t dp = (dph << 8) | dpl;
         auto regA = xdata[Register::A]->getValue();
-        IP = dp + regA;
-        BOOST_LOG_TRIVIAL(debug) << "JMP @A+DTR (at " << (uint)IP << ")";
+        IP.set(dp + regA);
+        BOOST_LOG_TRIVIAL(debug) << "JMP @A+DTR (at " <<IP << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -45,19 +45,20 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LCALL>::cycle() {
         std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
         cycleCounter=6;
         IP++;
-        uint16_t newAddress = flashMemory[IP]*256;
+        InstructionPointer newAddress;
+        newAddress.setHighByte(flashMemory[IP]);
         IP++;
-        newAddress += flashMemory[IP];
+        newAddress.setLowByte( flashMemory[IP] );
         IP++;
-        uint32_t oldAddress = IP;
+        InstructionPointer oldAddress = IP;
         uint16_t spAddress = xdata[Register::SP]->getValue();
         spAddress++;
-        xdata[spAddress]->setValue( IP & 0xFF);
+        xdata[spAddress]->setValue( IP.getLowByte());
         spAddress++;
-        xdata[spAddress]->setValue((IP >> 8) & 0xFF);
+        xdata[spAddress]->setValue(IP.getHiByte());
         xdata[Register::SP]->setValue(spAddress);
         IP = newAddress;
-        BOOST_LOG_TRIVIAL(debug) << "LCALL to address "  <<  (uint)newAddress << " (old address was " <<  oldAddress << ")";
+        BOOST_LOG_TRIVIAL(debug) << "LCALL to address "  <<  newAddress << " (old address was " <<  oldAddress << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -76,9 +77,9 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::RET>::cycle() {
         spAddress--;
         xdata[Register::SP]->setValue(spAddress);
 
-        IP = (hiIP << 8)  | lowIP;
+        IP.set((hiIP << 8)  | lowIP);
 
-        BOOST_LOG_TRIVIAL(debug) << "RET to address " <<  (uint)IP;
+        BOOST_LOG_TRIVIAL(debug) << "RET to address " <<  IP;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -97,7 +98,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CJNE_RN_DATA>::cycle() {
         int8_t relAddr = flashMemory[IP];
         IP++;
         if (xdata[rAddress]->getValue() != data){
-            IP += relAddr;
+            IP = IP + relAddr;
         }
         if (xdata[rAddress]->getValue() < data){
             xdata[Register::PSW]->setBit(7,true);
@@ -145,7 +146,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::SJMP>::cycle() {
         IP++;
         IP += relAddr;
 
-        BOOST_LOG_TRIVIAL(debug) << "SJMP AT " << (uint)IP;
+        BOOST_LOG_TRIVIAL(debug) << "SJMP AT " << IP;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }

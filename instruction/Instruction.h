@@ -16,17 +16,19 @@
 #include <iomanip>
 
 #include "InstructionFactory.h"
+#include "../InstructionPointer.h"
+
 class InstructionFactory;
 class FlashMemory;
 class XData;
 
 class Instruction {
 public:
-    Instruction(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata)
+    Instruction(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata)
     : instructionFactory(
             instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(1),registryUtil(xdata) { }
 
-    Instruction(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata,int cycleCounter)
+    Instruction(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata,int cycleCounter)
             : instructionFactory(
             instructionFactory), IP(IP), flashMemory(flashMemory), xdata(xdata), cycleCounter(cycleCounter),registryUtil(xdata) { }
 
@@ -36,7 +38,7 @@ public:
 protected:
     InstructionFactory &instructionFactory;
     FlashMemory &flashMemory;
-    uint32_t &IP;
+    InstructionPointer &IP;
     XData &xdata;
     RegistryUtil registryUtil;
     int cycleCounter;
@@ -45,14 +47,14 @@ protected:
 template <Instructions E>
 class InstrTempl: public Instruction{
 public:
-    InstrTempl(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+    InstrTempl(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
             Instruction(instructionFactory, IP, flashMemory, xdata){}
-    InstrTempl(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata, int cycleCount):
+    InstrTempl(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata, int cycleCount):
             Instruction(instructionFactory, IP, flashMemory, xdata,cycleCount){}
 
     std::shared_ptr<Instruction> cycle()  override{
         auto OP = flashMemory[IP];
-        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " << IP << std::endl;
         exit(-1);
     }
 };
@@ -60,7 +62,7 @@ public:
 template <Instructions E>
 class InstrTemp4: public Instruction{
 public:
-    InstrTemp4(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+    InstrTemp4(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
             Instruction(instructionFactory, IP, flashMemory, xdata,4){}
 
     std::shared_ptr<Instruction> cycle() override {
@@ -68,7 +70,7 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=4;
-            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            std::cout  << IP <<"  ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -76,7 +78,7 @@ public:
 
     void execution() {
         auto OP = flashMemory[IP];
-        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " <<IP << std::endl;
         exit(-1);
     }
 };
@@ -84,7 +86,7 @@ public:
 template <Instructions E>
 class InstrTemp3: public Instruction{
 public:
-    InstrTemp3(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+    InstrTemp3(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
             Instruction(instructionFactory, IP, flashMemory, xdata,3){}
 
     std::shared_ptr<Instruction> cycle() override {
@@ -92,7 +94,7 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=3;
-            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            std::cout  << IP <<"  ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -100,7 +102,7 @@ public:
 
     void execution() {
         auto OP = flashMemory[IP];
-        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " << IP << std::endl;
         exit(-1);
     }
 };
@@ -108,7 +110,7 @@ public:
 template <Instructions E>
 class InstrTemp2: public Instruction{
 public:
-    InstrTemp2(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+    InstrTemp2(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
             Instruction(instructionFactory, IP, flashMemory, xdata,2){}
 
     std::shared_ptr<Instruction> cycle() override {
@@ -116,7 +118,7 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=2;
-            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            std::cout  << IP <<"  ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -124,7 +126,7 @@ public:
 
     void execution() {
         auto OP = flashMemory[IP];
-        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " << IP << std::endl;
         exit(-1);
     }
 };
@@ -132,7 +134,7 @@ public:
 template <Instructions E>
 class InstrTemp1: public Instruction{
 public:
-    InstrTemp1(InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata):
+    InstrTemp1(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
             Instruction(instructionFactory, IP, flashMemory, xdata,1){}
 
     std::shared_ptr<Instruction> cycle() override {
@@ -140,7 +142,7 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=1;
-            std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
+            std::cout  << IP <<"  ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -148,7 +150,7 @@ public:
 
     void execution() {
         auto OP = flashMemory[IP];
-        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at 0x" <<std::setw(4) << (int)IP << std::endl;
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " << IP << std::endl;
         exit(-1);
     }
 };

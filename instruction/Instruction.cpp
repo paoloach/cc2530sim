@@ -4,10 +4,7 @@
 //
 #include <boost/log/trivial.hpp>
 #include <sstream>
-#include <stdint.h>
 #include "Instruction.h"
-#include "InstructionFactory.h"
-#include "Instructions.h"
 
 
 template<>
@@ -155,23 +152,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DIRECT>::cycle() {
     return instructionFactory.decode(flashMemory[IP]);
 }
 
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DIRECT_RN>::cycle() {
-    if (cycleCounter>0){
-        cycleCounter--;
-    } else {
-        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
-        cycleCounter=3;
-        uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
-        IP++;
-        uint8_t address = flashMemory[IP];
-        uint8_t data = xdata[Raddress]->getValue();
-        xdata[address]->setValue(data);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "[" << xdata[address]->getName() << "] <-- R" << (Raddress & 0x7);
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
+
 
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {

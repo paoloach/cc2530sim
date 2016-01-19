@@ -11,7 +11,7 @@
 
 class UnknownInstruction : public Instruction {
 public:
-    UnknownInstruction(uint8_t OP, InstructionFactory &instructionFactory, uint32_t &IP, FlashMemory &flashMemory, XData &xdata)
+    UnknownInstruction(uint8_t OP, InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata)
     : Instruction(instructionFactory, IP, flashMemory, xdata),OP(OP){ }
     virtual ~UnknownInstruction() = default;
 

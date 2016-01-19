@@ -43,6 +43,8 @@ enum class Instructions {
     MOV_DATA_DIRECT=0x75,
     MOV_RN_DATA=0x78,
     SJMP=0x80,
+    MOV_DIRECT_DIRECT=0x85,
+    MOV_DIRECT_AT_R=86,
     MOV_DIRECT_RN=0x88,
     MOV_DPTR_DATA=0x90,
     MOVC_A_DPTR=0x93,

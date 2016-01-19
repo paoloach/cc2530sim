@@ -9,12 +9,14 @@
 #include <istream>
 #include <ctype.h>
 #include <vector>
+#include "InstructionPointer.h"
 
 
 class FlashMemory {
 public:
     void loafFromString(std::istream & stream);
 
+    uint8_t operator[](InstructionPointer addr);
     uint8_t operator[](uint16_t addr);
 private:
     std::vector<uint8_t> memory;
