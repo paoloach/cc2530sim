@@ -3,7 +3,6 @@
 //
 
 #include <boost/log/trivial.hpp>
-#include <sstream>
 #include "Instruction.h"
 
 template<>

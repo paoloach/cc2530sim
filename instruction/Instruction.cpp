@@ -196,24 +196,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
 
 
 
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::INC_DPTR>::cycle() {
-    if (cycleCounter>0){
-        cycleCounter--;
-    } else {
-        std::cout  << std::setfill('0')  << std::setw(4) << IP <<"  ";
-        cycleCounter=1;
-        IP++;
-        uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-        uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
-        uint16_t dp = (dph << 8) | dpl;
-        dp++;
-        xdata[registryUtil.getDPH()]->setValue( (dp & 0xFF00) >> 8);
-        xdata[registryUtil.getDPL()]->setValue(dp & 0xFF);
-        BOOST_LOG_TRIVIAL(debug) << "INC DPTR (dptr=" << dp << ")";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
 
 
 template<>

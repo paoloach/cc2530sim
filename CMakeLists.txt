@@ -12,7 +12,7 @@ add_library(instruction_lib OBJECT
         instruction/Instruction.cpp
         instruction/InstructionFactory.cpp
         instruction/UnknownInstruction.cpp
-        instruction/RegistryUtil.cpp instruction/RegistryUtil.h registers/DPL0.cpp registers/DPL0.h registers/DPH0.cpp registers/DPH0.h registers/Acc.cpp registers/Acc.h registers/FMAP.cpp registers/FMAP.h instruction/InstructionAdd.cpp instruction/InstructionAdd.h instruction/InstructionXCH.cpp instruction/InstructionSub.cpp instruction/InstructionBranch.cpp registers/T1STAT.cpp registers/T1STAT.h instruction/InstructionMov.cpp)
+        instruction/RegistryUtil.cpp instruction/RegistryUtil.h registers/DPL0.cpp registers/DPL0.h registers/DPH0.cpp registers/DPH0.h registers/Acc.cpp registers/Acc.h registers/FMAP.cpp registers/FMAP.h instruction/InstructionAdd.cpp instruction/InstructionAdd.h instruction/InstructionXCH.cpp instruction/InstructionSub.cpp instruction/InstructionBranch.cpp registers/T1STAT.cpp registers/T1STAT.h instruction/InstructionMov.cpp instruction/InstructionInc.cpp)
 
 
 add_library(loader_lib OBJECT

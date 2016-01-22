@@ -17,6 +17,7 @@
 #include "registers/IEN0.h"
 #include "registers/IEN1.h"
 #include "registers/T1STAT.h"
+#include "registers/MEMCTR.h"
 
 XData::XData() {
     for (int i = 0; i < 0x10000; i++) {
@@ -34,6 +35,7 @@ XData::XData() {
     data[static_cast<uint16_t>(Register::IEN0)] = std::make_shared<IEN0>();
     data[static_cast<uint16_t>(Register::IEN1)] = std::make_shared<IEN1>();
     data[static_cast<uint16_t>(Register::T1STAT)] = std::make_shared<T1STAT>();
+    data[0xC7] = std::make_shared<MEMCTR>();
     data[0xE0] = std::make_shared<Acc>();
     data[0x9F] = std::make_shared<FMAP>();
 }
