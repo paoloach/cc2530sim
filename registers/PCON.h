@@ -2,18 +2,18 @@
 // Created by developer on 1/28/16.
 //
 
-#ifndef CC2530SIM_TCON_H
-#define CC2530SIM_TCON_H
+#ifndef CC2530SIM_PCON_H
+#define CC2530SIM_PCON_H
 #include "../MemoryLocation.h"
 
-class TCON : public MemoryLocation {
+class PCON : public MemoryLocation {
 public:
-    TCON() :MemoryLocation(0x88) {
+    PCON() :MemoryLocation(0x87) {
 
     }
 public:
     virtual std::string getName() override {
-        return "TCON";
+        return "PCON";
     }
 };
 #endif //CC2530SIM_PCON_H

@@ -18,6 +18,12 @@ enum class Instructions {
     JBC=0x10,
     ACALL=0x11,
     LCALL=0x12,
+
+    DEC_A=0x14,
+    DEC_ADDR=0x15,
+    DEC_AT_Rn=0x16,
+    DEC_RN=0x18,
+
     RET=0x22,
     RL_A=0x23,
     ADD_A_DATA=0x24,

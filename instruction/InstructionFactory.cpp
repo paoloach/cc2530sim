@@ -29,6 +29,20 @@ InstructionFactory::InstructionFactory(InstructionPointer &IP, FlashMemory &flas
     decodeMap[0x0F] = std::make_shared<InstrTemp1<Instructions::INC_RN>>(*this, IP, flashMemory,xdata);
     decodeMap[0x10] = std::make_shared<InstrTemp4<Instructions::JBC>>(*this, IP, flashMemory,xdata);
     decodeMap[0x12] = std::make_shared<InstrTempl<Instructions::LCALL>>(*this, IP, flashMemory,xdata);
+
+    decodeMap[0x14] = std::make_shared<InstrTemp1<Instructions::DEC_A>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x15] = std::make_shared<InstrTemp2<Instructions::DEC_ADDR>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x16] = std::make_shared<InstrTemp2<Instructions::DEC_AT_Rn>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x17] = std::make_shared<InstrTemp2<Instructions::DEC_AT_Rn>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x18] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x19] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1A] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1B] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1C] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1D] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1E] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x1F] = std::make_shared<InstrTemp1<Instructions::DEC_RN>>(*this, IP, flashMemory,xdata);
+
     decodeMap[0x22] = std::make_shared<InstrTempl<Instructions::RET>>(*this, IP, flashMemory,xdata);
     decodeMap[0x23] = std::make_shared<InstrTempl<Instructions::RL_A>>(*this, IP, flashMemory,xdata);
     decodeMap[0x24] = std::make_shared<InstrTemp2<Instructions::ADD_A_DATA>>(*this, IP, flashMemory,xdata);

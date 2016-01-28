@@ -21,10 +21,6 @@ void InstrTemp1<Instructions::INC_DPTR>::execution() {
 template<>
 void InstrTemp1<Instructions::INC_A>::execution() {
     IP++;
-    uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
-    uint16_t dp = (dph << 8) | dpl;
-    dp++;
     uint8_t a = xdata[Register::A]->getValue();
     a++;
     xdata[Register::A]->setValue(a);
