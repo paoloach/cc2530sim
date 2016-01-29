@@ -66,6 +66,16 @@
 #include "registers/DMAARM.h"
 #include "registers/DMAIRQ.h"
 #include "registers/DMAREQ.h"
+#include "registers/MPAGE.h"
+#include "registers/RFD.h"
+#include "registers/RFERRF.h"
+#include "registers/RFIRQF0.h"
+#include "registers/RFIRQF1.h"
+#include "registers/RFST.h"
+#include "registers/ST0.h"
+#include "registers/ST1.h"
+#include "registers/ST2.h"
+#include "registers/STLOAD.h"
 
 XData::XData() {
     for (int i = 0; i < 0x10000; i++) {
@@ -86,17 +96,25 @@ XData::XData() {
     data[0x8C] = std::make_shared<PICTL>();
     data[0x8D] = std::make_shared<P1IEN>();
     data[0x8F] = std::make_shared<P0INP>();
+
     data[0x90] = std::make_shared<P1>();
+    data[0x91] = std::make_shared<RFIRQF1>();
     data[0x92] = std::make_shared<DPS>();
+    data[0x93] = std::make_shared<MPAGE>();
+    data[0x95] = std::make_shared<ST0>();
+    data[0x96] = std::make_shared<ST1>();
+    data[0x97] = std::make_shared<ST2>();
     data[0x98] = std::make_shared<S0CON>();
     data[0x9A] = std::make_shared<IEN2>();
     data[0x9B] = std::make_shared<S1CON>();
     data[0x9F] = std::make_shared<FMAP>();
+
     data[0xA0] = std::make_shared<P2>();
     data[0xA8] = std::make_shared<IEN0>();
     data[0xA9] = std::make_shared<IP0>();
     data[0xAB] = std::make_shared<P0IEN>();
     data[0xAC] = std::make_shared<P2IEN>();
+    data[0xAD] = std::make_shared<STLOAD>();
     data[0xAE] = std::make_shared<PMUX>();
     data[0xB1] = std::make_shared<ENCDI>();
     data[0xB2] = std::make_shared<ENCDO>();
@@ -110,28 +128,12 @@ XData::XData() {
     data[0xBB] = std::make_shared<ADCH>();
     data[0xBC] = std::make_shared<RNDL>();
     data[0xBD] = std::make_shared<RNDH>();
+    data[0xBD] = std::make_shared<RFERRF>();
 
     data[0xC0] = std::make_shared<IRCON>();
-
-    data[0xE0] = std::make_shared<Acc>();
-    data[0xE8] = std::make_shared<IRCON2>();
-    data[0xF0] = std::make_shared<B>();
-
-    data[static_cast<uint16_t>(Register::T1STAT)] = std::make_shared<T1STAT>();
-    data[0xD0] = std::make_shared<PSW>();
-    data[0xB1] = std::make_shared<ENCDI>();
-    data[0xB2] = std::make_shared<ENCDO>();
-    data[0xB3] = std::make_shared<ENCCS>();
-    data[0xB4] = std::make_shared<ADCCON1>();
-    data[0xB5] = std::make_shared<ADCCON2>();
-    data[0xB6] = std::make_shared<ADCCON3>();
-    data[0xBA] = std::make_shared<ADCL>();
-    data[0xBB] = std::make_shared<ADCH>();
-    data[0xBC] = std::make_shared<RNDL>();
-    data[0xBD] = std::make_shared<RNDH>();
-
     data[0xC7] = std::make_shared<MEMCTR>();
 
+    data[0xD0] = std::make_shared<PSW>();
     data[0xD1] = std::make_shared<DMAIRQ>();
     data[0xD2] = std::make_shared<DMA1CFGL>();
     data[0xD3] = std::make_shared<DMA1CFGH>();
@@ -139,7 +141,14 @@ XData::XData() {
     data[0xD5] = std::make_shared<DMA0CFGH>();
     data[0xD6] = std::make_shared<DMAARM>();
     data[0xD7] = std::make_shared<DMAREQ>();
+    data[0xD9] = std::make_shared<RFD>();
 
+    data[0xE0] = std::make_shared<Acc>();
+    data[0xE1] = std::make_shared<RFST>();
+    data[0xE8] = std::make_shared<IRCON2>();
+    data[0xE9] = std::make_shared<RFIRQF0>();
+
+    data[0xF0] = std::make_shared<B>();
     data[0xF1] = std::make_shared<PERCFG>();
     data[0xF2] = std::make_shared<APCFG>();
     data[0xF3] = std::make_shared<P0SEL>();
@@ -151,6 +160,7 @@ XData::XData() {
     data[0xFE] = std::make_shared<P1DIR>();
     data[0xFF] = std::make_shared<P2DIR>();
 
+    data[static_cast<uint16_t>(Register::T1STAT)] = std::make_shared<T1STAT>();
 
 
 }
