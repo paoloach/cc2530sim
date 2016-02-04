@@ -169,3 +169,18 @@ void InstrTemp4<Instructions::JBC>::execution() {
     }
     BOOST_LOG_TRIVIAL(debug) << "JBC [" << xAddress->getName() <<"], bit " << bit << " " << destIP;
 }
+
+template<>
+void InstrTemp3<Instructions::JNC>::execution() {
+    IP++;
+    uint8_t rel_addr =  flashMemory[IP];
+    uint16_t ipVal = IP.getValue();
+    if (rel_addr & 0x80){
+        rel_addr = (~rel_addr)+1;
+        ipVal -= rel_addr;
+    } else {
+        ipVal += rel_addr;
+    }
+    IP.set(ipVal);
+    BOOST_LOG_TRIVIAL(debug) << "JNC " << ipVal;
+}

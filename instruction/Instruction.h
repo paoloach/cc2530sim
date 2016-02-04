@@ -70,7 +70,8 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=4;
-            std::cout  << IP <<"  ";
+            uint opcode = flashMemory[IP];
+            std::cout  << IP <<"  " << std::hex << opcode << " ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -94,7 +95,8 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=3;
-            std::cout  << IP <<"  ";
+            uint opcode = flashMemory[IP];
+            std::cout  << IP <<"  " << std::hex << opcode << " ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -118,7 +120,8 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=2;
-            std::cout  << IP <<"  ";
+            uint opcode = flashMemory[IP];
+            std::cout  << IP <<"  " << std::hex << opcode << " ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -142,7 +145,8 @@ public:
             cycleCounter--;
         } else {
             cycleCounter=1;
-            std::cout  << IP <<"  ";
+            uint opcode = flashMemory[IP];
+            std::cout  << IP <<"  " << std::hex << opcode << " ";
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);

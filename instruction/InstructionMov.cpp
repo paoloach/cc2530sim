@@ -27,7 +27,7 @@ void InstrTemp3<Instructions::MOV_DIRECT_RN>::execution() {
     IP++;
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
-    BOOST_LOG_TRIVIAL(debug) << "[" << addressDest->getName() << "](" << (int) value << ") <-- R" << (Raddress & 0x7);
+    BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << (int) value << ") <-- R" << (Raddress & 0x7);
 }
 
 
@@ -38,7 +38,7 @@ void InstrTemp2<Instructions::MOV_A_DIRECT>::execution() {
     uint8_t data = xdata[address]->getValue();
     xdata[Register::A]->setValue(data);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "A <-- [" << xdata[address]->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "MOV A(=" << (int)data << ") <-- [" << xdata[address]->getName() << "]";
 }
 
 template<>
@@ -51,19 +51,18 @@ void InstrTemp2<Instructions::MOV_A_AT_RN>::execution() {
     auto xMem = xdata[rVal];
     uint8_t data = xMem->getValue();
     xdata[Register::A]->setValue(data);
-    IP++;
-    BOOST_LOG_TRIVIAL(debug) << "A(" << (uint) data << ") <-- @R" << rbit << "[" << xMem->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "MOV A(=" << (uint) data << ") <-- @R" << rbit << "[" << xMem->getName() << "]";
 }
 
 template<>
 void InstrTemp1<Instructions::MOV_A_RN>::execution() {
-    uint16_t rbit = flashMemory[IP] & 0x01;
+    uint16_t rbit = flashMemory[IP] & 0x07;
     uint16_t Raddress = registryUtil.getRAddress(rbit);
     auto rn = xdata[Raddress];
     IP++;
     uint8_t data = rn->getValue();
     xdata[Register::A]->setValue(data);
-    BOOST_LOG_TRIVIAL(debug) << "MOV A(" << (uint) data << ") <-- R" << rbit;
+    BOOST_LOG_TRIVIAL(debug) << "MOV A(=" << (uint) data << ") <-- R" << rbit;
 }
 
 template<>
@@ -93,7 +92,7 @@ void InstrTemp2<Instructions::MOV_AT_RN_A>::execution() {
 
 template<>
 void InstrTemp1<Instructions::MOV_RN_A>::execution() {
-    uint16_t rbit = flashMemory[IP] & 0x01;
+    uint16_t rbit = flashMemory[IP] & 0x07;
     uint16_t Raddress = registryUtil.getRAddress(rbit);
     auto dest = xdata[Raddress];
     IP++;

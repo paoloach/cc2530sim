@@ -40,6 +40,18 @@
 #include "registers/IEN0.h"
 #include "registers/IEN1.h"
 #include "registers/IEN2.h"
+#include "registers/T1CC0L.h"
+#include "registers/T1CC0H.h"
+#include "registers/T1CC1L.h"
+#include "registers/T1CC1H.h"
+#include "registers/T1CC2L.h"
+#include "registers/T1CC2H.h"
+#include "registers/T1CNTH.h"
+#include "registers/T1CNTL.h"
+#include "registers/T1CTL.h"
+#include "registers/T1CCTL0.h"
+#include "registers/T1CCTL1.h"
+#include "registers/T1CCTL2.h"
 #include "registers/T1STAT.h"
 #include "registers/MEMCTR.h"
 #include "registers/ADCCON1.h"
@@ -76,6 +88,10 @@
 #include "registers/ST1.h"
 #include "registers/ST2.h"
 #include "registers/STLOAD.h"
+#include "registers/SLEEPCMD.h"
+#include "registers/SLEEPSTA.h"
+#include "registers/CLKCONCMD.h"
+#include "registers/CLKCONSTA.h"
 
 XData::XData() {
     for (int i = 0; i < 0x10000; i++) {
@@ -107,6 +123,8 @@ XData::XData() {
     data[0x98] = std::make_shared<S0CON>();
     data[0x9A] = std::make_shared<IEN2>();
     data[0x9B] = std::make_shared<S1CON>();
+    data[0x9D] = std::make_shared<SLEEPSTA>();
+    data[0x9E] = std::make_shared<CLKCONSTA>();
     data[0x9F] = std::make_shared<FMAP>();
 
     data[0xA0] = std::make_shared<P2>();
@@ -116,6 +134,8 @@ XData::XData() {
     data[0xAC] = std::make_shared<P2IEN>();
     data[0xAD] = std::make_shared<STLOAD>();
     data[0xAE] = std::make_shared<PMUX>();
+    data[0xAF] = std::make_shared<T1STAT>();
+
     data[0xB1] = std::make_shared<ENCDI>();
     data[0xB2] = std::make_shared<ENCDO>();
     data[0xB3] = std::make_shared<ENCCS>();
@@ -128,9 +148,11 @@ XData::XData() {
     data[0xBB] = std::make_shared<ADCH>();
     data[0xBC] = std::make_shared<RNDL>();
     data[0xBD] = std::make_shared<RNDH>();
-    data[0xBD] = std::make_shared<RFERRF>();
+    data[0xBE] = std::make_shared<SLEEPCMD>();
+    data[0xBF] = std::make_shared<RFERRF>();
 
     data[0xC0] = std::make_shared<IRCON>();
+    data[0xC6] = std::make_shared<CLKCONCMD>();
     data[0xC7] = std::make_shared<MEMCTR>();
 
     data[0xD0] = std::make_shared<PSW>();
@@ -142,9 +164,22 @@ XData::XData() {
     data[0xD6] = std::make_shared<DMAARM>();
     data[0xD7] = std::make_shared<DMAREQ>();
     data[0xD9] = std::make_shared<RFD>();
+    data[0xDA] = std::make_shared<T1CC0L>();
+    data[0xDB] = std::make_shared<T1CC0H>();
+    data[0xDC] = std::make_shared<T1CC1L>();
+    data[0xDD] = std::make_shared<T1CC1H>();
+    data[0xDE] = std::make_shared<T1CC2L>();
+    data[0xDF] = std::make_shared<T1CC2H>();
 
     data[0xE0] = std::make_shared<Acc>();
     data[0xE1] = std::make_shared<RFST>();
+    data[0xE2] = std::make_shared<T1CNTL>();
+    data[0xE3] = std::make_shared<T1CNTH>();
+    data[0xE4] = std::make_shared<T1CTL>();
+    data[0xE5] = std::make_shared<T1CCTL0>();
+    data[0xE6] = std::make_shared<T1CCTL1>();
+    data[0xE7] = std::make_shared<T1CCTL2>();
+
     data[0xE8] = std::make_shared<IRCON2>();
     data[0xE9] = std::make_shared<RFIRQF0>();
 
@@ -160,7 +195,6 @@ XData::XData() {
     data[0xFE] = std::make_shared<P1DIR>();
     data[0xFF] = std::make_shared<P2DIR>();
 
-    data[static_cast<uint16_t>(Register::T1STAT)] = std::make_shared<T1STAT>();
 
 
 }

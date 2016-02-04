@@ -19,7 +19,12 @@ void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     statusWord->setBit(2, ov);
     xdata[Register::A]->setValue(newValue);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "A(=" << (newValue & 0xFF) << ") <-- A  + 0x"  << (((uint) data) & 0xFF);
+    if (data >= 0){
+        BOOST_LOG_TRIVIAL(debug) << "A(=" << (newValue & 0xFF) << ") <-- A  + " << (((uint) data) & 0xFF);
+    } else {
+        data = -data;
+        BOOST_LOG_TRIVIAL(debug) << "A(=" << (newValue & 0xFF) << ") <-- A  -  " << (((uint) data) & 0xFF);
+    }
 }
 
 
