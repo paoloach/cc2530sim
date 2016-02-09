@@ -10,10 +10,11 @@ IntelHexData::IntelHexData(uint32_t address, IntelHexStatus & status, std::vecto
 
 void IntelHexData::execute(std::vector<uint8_t> & memory) {
     uint32_t  realAddress = status.startLinearAddress + (status.extendLinearAddress << 16) + address;
-    if (memory.size() < realAddress){
-        memory.resize(realAddress, 0);
+    if (memory.size() < realAddress+data.size()){
+        memory.resize(realAddress+data.size(), 0);
     }
     for(uint8_t byte: data){
-        memory.push_back(byte);
+        memory[realAddress] =byte;
+        realAddress++;
     }
 }

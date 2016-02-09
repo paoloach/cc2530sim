@@ -8,9 +8,9 @@
 
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::NOP>::cycle() {
+void InstrTemp1<Instructions::NOP>::execution() {
     IP++;
-    return instructionFactory.decode(flashMemory[IP]);
+    BOOST_LOG_TRIVIAL(debug) << "NOP";
 }
 
 template<>
@@ -30,21 +30,14 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DATA>::cycle() {
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DATA_DIRECT>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 3;
-        IP++;
-        uint8_t address = flashMemory[IP];
-        IP++;
-        uint8_t data = flashMemory[IP];
-        IP++;
-        xdata[address]->setValue(data);
-        BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- 0x" << (uint) data;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp3<Instructions::MOV_DATA_DIRECT>::execution() {
+    IP++;
+    uint8_t address = flashMemory[IP];
+    IP++;
+    uint8_t data = flashMemory[IP];
+    IP++;
+    xdata[address]->setValue(data);
+    BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- 0x" << (uint) data;
 }
 
 
@@ -256,7 +249,7 @@ void InstrTemp2<Instructions::MOV_C_BIT_ADDR>::execution() {
     auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
     auto xAddress = xdata[address];
     bool bitValue = xAddress->getBit(bit);
-    xdata[Register::PSW]->setBit(7,bitValue);
+    xdata[Register::PSW]->setBit(7, bitValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "MOV C, bit " << bit << " of [" << xAddress->getName() << "]";
 }

@@ -8,9 +8,9 @@
 template<>
 void  InstrTemp4<Instructions::MOV_DIRECT_DIRECT>::execution() {
     IP++;
-    auto addressDest = xdata[flashMemory[IP]];
-    IP++;
     auto addressSrc = xdata[flashMemory[IP]];
+    IP++;
+    auto addressDest = xdata[flashMemory[IP]];
     IP++;
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
@@ -86,8 +86,7 @@ void InstrTemp2<Instructions::MOV_AT_RN_A>::execution() {
     auto dest = xdata[rVal];
     uint8_t data = xdata[Register::A]->getValue();
     dest->setValue(data);
-    IP++;
-    BOOST_LOG_TRIVIAL(debug) <<"R" << rbit <<"[" << dest->getName() << "](" << (uint) data << ") <-- A";
+    BOOST_LOG_TRIVIAL(debug) <<"@R" << rbit <<"[" << dest->getName() << "](" << (uint) data << ") <-- A";
 }
 
 template<>

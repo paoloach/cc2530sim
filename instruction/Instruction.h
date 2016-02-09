@@ -71,7 +71,8 @@ public:
         } else {
             cycleCounter=4;
             uint opcode = flashMemory[IP];
-            std::cout  << IP <<"  " << std::hex << opcode << " ";
+            uint opcode1 = flashMemory[IP+1];
+            std::cout  << IP <<"  " << std::hex << opcode << " " << opcode1;
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -96,7 +97,8 @@ public:
         } else {
             cycleCounter=3;
             uint opcode = flashMemory[IP];
-            std::cout  << IP <<"  " << std::hex << opcode << " ";
+            uint opcode1 = flashMemory[IP+1];
+            std::cout  << IP <<"  " << std::hex << opcode << " " << opcode1;
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);
@@ -121,7 +123,8 @@ public:
         } else {
             cycleCounter=2;
             uint opcode = flashMemory[IP];
-            std::cout  << IP <<"  " << std::hex << opcode << " ";
+            uint opcode1 = flashMemory[IP+1];
+            std::cout  << IP <<"  " << std::hex << opcode << " " << opcode1;
             execution();
         }
         return instructionFactory.decode(flashMemory[IP]);

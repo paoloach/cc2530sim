@@ -153,12 +153,29 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::SJMP>::cycle() {
 
 
 template<>
+void InstrTemp4<Instructions::JB>::execution() {
+    IP++;
+    auto bitAddress = flashMemory[IP];
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(bitAddress);
+    auto xAddress = xdata[address];
+    IP++;
+    int8_t relAddr = flashMemory[IP];
+    IP++;
+    auto destIP = IP+relAddr;
+    if (xAddress->getBit(bit)){
+        IP = destIP;
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JB [" << xAddress->getName() <<"], bit " << bit << " " << destIP;
+}
+
+template<>
 void InstrTemp4<Instructions::JBC>::execution() {
     IP++;
     auto bitAddress = flashMemory[IP];
     auto bit = bitAddress & 0x07;
     auto address = registryUtil.getXAddressFromBitAddress(bitAddress);
-    auto xAddress = xdata[bitAddress];
+    auto xAddress = xdata[address];
     IP++;
     int8_t relAddr = flashMemory[IP];
     IP++;
@@ -171,9 +188,10 @@ void InstrTemp4<Instructions::JBC>::execution() {
 }
 
 template<>
-void InstrTemp3<Instructions::JNC>::execution() {
+void InstrTemp3<Instructions::JC>::execution() {
     IP++;
     uint8_t rel_addr =  flashMemory[IP];
+    IP++;
     uint16_t ipVal = IP.getValue();
     if (rel_addr & 0x80){
         rel_addr = (~rel_addr)+1;
@@ -181,6 +199,70 @@ void InstrTemp3<Instructions::JNC>::execution() {
     } else {
         ipVal += rel_addr;
     }
-    IP.set(ipVal);
-    BOOST_LOG_TRIVIAL(debug) << "JNC " << ipVal;
+    uint8_t psw = xdata[Register::PSW]->getValue();
+    bool carry = psw & 0x80;
+    if (carry) {
+        IP.set(ipVal);
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JC(C=" << carry << ") "<< IP;
+}
+
+template<>
+void InstrTemp3<Instructions::JNC>::execution() {
+    IP++;
+    uint8_t rel_addr =  flashMemory[IP];
+    IP++;
+    uint16_t ipVal = IP.getValue();
+    if (rel_addr & 0x80){
+        rel_addr = (~rel_addr)+1;
+        ipVal -= rel_addr;
+    } else {
+        ipVal += rel_addr;
+    }
+    uint8_t psw = xdata[Register::PSW]->getValue();
+    bool carry = psw & 0x80;
+    if (!carry) {
+        IP.set(ipVal);
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JNC(C=" << carry << ") " << IP;
+}
+
+template<>
+void InstrTemp3<Instructions::JZ>::execution() {
+    IP++;
+    uint8_t rel_addr =  flashMemory[IP];
+    IP++;
+    bool z = xdata[Register::A]->getValue() == 0;
+
+    uint16_t ipVal = IP.getValue();
+    if (rel_addr & 0x80){
+        rel_addr = (~rel_addr)+1;
+        ipVal -= rel_addr;
+    } else {
+        ipVal += rel_addr;
+    }
+    if (z) {
+        IP.set(ipVal);
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JZ(z=" << z << ") " << IP;
+}
+
+template<>
+void InstrTemp3<Instructions::JNZ>::execution() {
+    IP++;
+    uint8_t rel_addr =  flashMemory[IP];
+    IP++;
+    bool z = xdata[Register::A]->getValue() == 0;
+
+    uint16_t ipVal = IP.getValue();
+    if (rel_addr & 0x80){
+        rel_addr = (~rel_addr)+1;
+        ipVal -= rel_addr;
+    } else {
+        ipVal += rel_addr;
+    }
+    if (!z) {
+        IP.set(ipVal);
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JNZ(z=" << z << ") " << IP;
 }

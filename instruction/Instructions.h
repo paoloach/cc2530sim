@@ -23,7 +23,7 @@ enum class Instructions {
     DEC_ADDR=0x15,
     DEC_AT_Rn=0x16,
     DEC_RN=0x18,
-
+    JB=0x20,
     RET=0x22,
     RL_A=0x23,
     ADD_A_DATA=0x24,
@@ -34,7 +34,7 @@ enum class Instructions {
     ADDC_A_DIRECT=0x35,
     ADDC_A_AT_RN=0x36,
     ADDC_A_RN=0x38,
-
+    JC=0x40,
     ORL_DIRECT_A=0x42,
     ORL_DIRECT_DATA=0x43,
     ORL_A_DATA=0x44,
@@ -44,6 +44,8 @@ enum class Instructions {
     ORL_A_R1=0x48,
     JNC=0x50,
     ANL_A_DATA=0x54,
+    JZ=0x60,
+    JNZ=0x70,
     JMP_A_DPTR=0x73,
     MOV_A_DATA=0x74,
     MOV_DATA_DIRECT=0x75,
