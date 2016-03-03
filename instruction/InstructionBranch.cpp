@@ -5,6 +5,18 @@
 #include <stdint.h>
 #include "Instruction.h"
 
+
+template<>
+void InstrTemp3<Instructions::AJMP>::execution() {
+    uint16_t hiBits = flashMemory[IP] ;
+    hiBits = (hiBits & 0xE0) << 3;
+    IP++;
+    uint16_t loBits = flashMemory[IP];
+    auto newAddress = hiBits | loBits;
+    IP.set(newAddress);
+    BOOST_LOG_TRIVIAL(debug) << "AJMP to IP";
+}
+
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::LJMP>::cycle() {
     if (cycleCounter>0){
@@ -167,6 +179,23 @@ void InstrTemp4<Instructions::JB>::execution() {
         IP = destIP;
     }
     BOOST_LOG_TRIVIAL(debug) << "JB [" << xAddress->getName() <<"], bit " << bit << " " << destIP;
+}
+
+template<>
+void InstrTemp4<Instructions::JNB>::execution() {
+    IP++;
+    auto bitAddress = flashMemory[IP];
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(bitAddress);
+    auto xAddress = xdata[address];
+    IP++;
+    int8_t relAddr = flashMemory[IP];
+    IP++;
+    auto destIP = IP+relAddr;
+    if (!xAddress->getBit(bit)){
+        IP = destIP;
+    }
+    BOOST_LOG_TRIVIAL(debug) << "JNB [" << xAddress->getName() <<"], bit " << bit << " " << destIP;
 }
 
 template<>

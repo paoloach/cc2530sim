@@ -27,7 +27,8 @@ void InstrTemp3<Instructions::MOV_DIRECT_RN>::execution() {
     IP++;
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
-    BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << (int) value << ") <-- R" << (Raddress & 0x7);
+    BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << (int) value << ") <-- R" <<
+                             (Raddress & 0x7) <<" [" << (int)xdata[4]->getValue() << "]";
 }
 
 
@@ -38,7 +39,7 @@ void InstrTemp2<Instructions::MOV_A_DIRECT>::execution() {
     uint8_t data = xdata[address]->getValue();
     xdata[Register::A]->setValue(data);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "MOV A(=" << (int)data << ") <-- [" << xdata[address]->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "MOV A(=" << (int) data << ") <-- [" << xdata[address]->getName() << "]";
 }
 
 template<>
@@ -73,7 +74,7 @@ void InstrTemp2<Instructions::MOV_DIRECT_A>::execution() {
     uint8_t data = xdata[Register::A]->getValue();
     dest->setValue(data);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "[" << dest->getName() << "](" << (uint)data << ") <-- A";
+    BOOST_LOG_TRIVIAL(debug) << "[" << dest->getName() << "](" << (uint) data << ") <-- A";
 }
 
 template<>
@@ -86,7 +87,7 @@ void InstrTemp2<Instructions::MOV_AT_RN_A>::execution() {
     auto dest = xdata[rVal];
     uint8_t data = xdata[Register::A]->getValue();
     dest->setValue(data);
-    BOOST_LOG_TRIVIAL(debug) <<"@R" << rbit <<"[" << dest->getName() << "](" << (uint) data << ") <-- A";
+    BOOST_LOG_TRIVIAL(debug) << "@R" << rbit << "[" << dest->getName() << "](" << (uint) data << ") <-- A";
 }
 
 template<>
@@ -98,4 +99,15 @@ void InstrTemp1<Instructions::MOV_RN_A>::execution() {
     uint8_t data = xdata[Register::A]->getValue();
     dest->setValue(data);
     BOOST_LOG_TRIVIAL(debug) << "MOV R" << rbit << "(" << (uint) data << ") <-- A";
+}
+
+template<>
+void InstrTemp4<Instructions::MOV_RN_DIRECT>::execution() {
+    uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
+    IP++;
+    uint8_t address = flashMemory[IP];
+    uint8_t data = xdata[address]->getValue();
+    xdata[Raddress]->setValue(data);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "MOV R" << (Raddress & 0x7) << "(=" << (int)data  << ") <--  [" << xdata[address]->getName() << "]";
 }

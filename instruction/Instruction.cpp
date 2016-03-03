@@ -89,23 +89,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
     return instructionFactory.decode(flashMemory[IP]);
 }
 
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DIRECT>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 4;
-        uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
-        IP++;
-        uint8_t address = flashMemory[IP];
-        uint8_t data = xdata[address]->getValue();
-        xdata[Raddress]->setValue(data);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "MOV R" << (Raddress & 0x7) << " <--  [" << xdata[address]->getName() << "]";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
 
 
 template<>

@@ -8,7 +8,7 @@
 
 enum class Instructions {
     NOP=0,
-    AJMP,
+    AJMP=1,
     LJMP=2,
     RR_A,
     INC_A=0x04,
@@ -30,6 +30,7 @@ enum class Instructions {
     ADD_A_DIRECT=0x25,
     ADD_A_AT_RN=0x26,
     ADD_A_RN=0x28,
+    JNB=0x30,
     ADDC_A_DATA=0x34,
     ADDC_A_DIRECT=0x35,
     ADDC_A_AT_RN=0x36,
