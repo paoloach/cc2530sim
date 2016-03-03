@@ -245,3 +245,11 @@ void InstrTemp1<Instructions::CLR_C>::execution() {
     BOOST_LOG_TRIVIAL(debug) << "CLR C ";
 }
 
+template<>
+void InstrTemp1<Instructions::RR_A>::execution() {
+    IP++;
+    auto reg_a = xdata[Register::A];
+    auto aRR = reg_a->getValue() << 1;
+    reg_a->setValue(aRR);
+    BOOST_LOG_TRIVIAL(debug) << "RR A";
+}

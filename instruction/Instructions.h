@@ -10,7 +10,7 @@ enum class Instructions {
     NOP=0,
     AJMP=1,
     LJMP=2,
-    RR_A,
+    RR_A=0x03,
     INC_A=0x04,
     INC_ADDR=0x05,
     INC_AT_Rn=0x06,
