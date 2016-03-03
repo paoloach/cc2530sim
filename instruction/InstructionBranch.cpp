@@ -18,6 +18,25 @@ void InstrTemp3<Instructions::AJMP>::execution() {
 }
 
 template<>
+void InstrTemp6<Instructions::ACALL>::execution() {
+    uint16_t hiBits = flashMemory[IP] ;
+    hiBits = (hiBits & 0xE0) << 3;
+    IP++;
+    uint16_t loBits = flashMemory[IP];
+    auto newAddress = hiBits | loBits;
+    IP++;
+    auto oldAddress = IP.getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue();
+    spAddress++;
+    xdata[spAddress]->setValue( IP.getLowByte());
+    spAddress++;
+    xdata[spAddress]->setValue(IP.getHiByte());
+    xdata[Register::SP]->setValue(spAddress);
+    IP.set(newAddress);
+    BOOST_LOG_TRIVIAL(debug) << "ACALL to address "  <<  newAddress << " (old address was " <<  oldAddress << ")";
+}
+
+template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::LJMP>::cycle() {
     if (cycleCounter>0){
         cycleCounter--;
