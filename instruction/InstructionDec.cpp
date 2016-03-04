@@ -5,18 +5,6 @@
 #include <boost/log/trivial.hpp>
 #include "Instruction.h"
 
-//template<>
-//void InstrTemp1<Instructions::DEC_DPTR>::execution() {
-//    IP++;
-//    uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-//    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
-//    uint16_t dp = (dph << 8) | dpl;
-//    dp--;
-//    xdata[registryUtil.getDPH()]->setValue((dp & 0xFF00) >> 8);
-//    xdata[registryUtil.getDPL()]->setValue(dp & 0xFF);
-//    BOOST_LOG_TRIVIAL(debug) << "DEC DPTR (dptr=" << dp << ")";
-//}
-
 
 template<>
 void InstrTemp1<Instructions::DEC_A>::execution() {

@@ -196,5 +196,6 @@ XData::XData() {
     data[0xFF] = std::make_shared<P2DIR>();
 
 
+    A = data[0xE0];
 
 }

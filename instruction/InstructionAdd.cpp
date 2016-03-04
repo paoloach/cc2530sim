@@ -10,7 +10,7 @@ template<>
 void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     IP++;
     int8_t data = flashMemory[IP];
-    int8_t REG_A = xdata[Register::A]->getValue();
+    int8_t REG_A = xdata.A->getValue();
     int16_t newValue = data + REG_A;
     bool carry = newValue & 0x100;
     bool ov;
