@@ -18,7 +18,7 @@ enum class Instructions {
     JBC=0x10,
     ACALL=0x11,
     LCALL=0x12,
-
+    RRC_A=0x13,
     DEC_A=0x14,
     DEC_ADDR=0x15,
     DEC_AT_Rn=0x16,
@@ -31,6 +31,8 @@ enum class Instructions {
     ADD_A_AT_RN=0x26,
     ADD_A_RN=0x28,
     JNB=0x30,
+    RETI=0x32,
+    RLC_A=0x33,
     ADDC_A_DATA=0x34,
     ADDC_A_DIRECT=0x35,
     ADDC_A_AT_RN=0x36,
