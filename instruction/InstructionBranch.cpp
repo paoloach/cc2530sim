@@ -26,7 +26,7 @@ void InstrTemp6<Instructions::ACALL>::execution() {
     auto newAddress = hiBits | loBits;
     IP++;
     auto oldAddress = IP.getValue();
-    uint16_t spAddress = xdata[Register::SP]->getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
     spAddress++;
     xdata[spAddress]->setValue(IP.getLowByte());
     spAddress++;
@@ -58,11 +58,11 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::JMP_A_DPTR>::cycle() {
     } else {
         BOOST_LOG_TRIVIAL(debug) << IP << "  ";
         cycleCounter = 2;
-        uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-        uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
+        uint16_t dph = xdata[registryUtil.getDPH()]->getValue().getValue();
+        uint16_t dpl = xdata[registryUtil.getDPL()]->getValue().getValue();
         uint16_t dp = (dph << 8) | dpl;
         auto regA = xdata[Register::A]->getValue();
-        IP.set(dp + regA);
+        IP.set(dp + regA.getValue());
         BOOST_LOG_TRIVIAL(debug) << "JMP @A+DTR (at " << IP << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
@@ -82,7 +82,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LCALL>::cycle() {
         newAddress.setLowByte(flashMemory[IP]);
         IP++;
         InstructionPointer oldAddress = IP;
-        uint16_t spAddress = xdata[Register::SP]->getValue();
+        uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
         spAddress++;
         xdata[spAddress]->setValue(IP.getLowByte());
         spAddress++;
@@ -96,10 +96,10 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::LCALL>::cycle() {
 
 template<>
 void InstrTemp4<Instructions::RET>::execution() {
-    uint16_t spAddress = xdata[Register::SP]->getValue();
-    uint32_t hiIP = xdata[spAddress]->getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
+    uint32_t hiIP = xdata[spAddress]->getValue().getValue();
     spAddress--;
-    uint32_t lowIP = xdata[spAddress]->getValue();
+    uint32_t lowIP = xdata[spAddress]->getValue().getValue();
     spAddress--;
     xdata[Register::SP]->setValue(spAddress);
 
@@ -110,10 +110,10 @@ void InstrTemp4<Instructions::RET>::execution() {
 
 template<>
 void InstrTemp4<Instructions::RETI>::execution() {
-    uint16_t spAddress = xdata[Register::SP]->getValue();
-    uint32_t hiIP = xdata[spAddress]->getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
+    uint32_t hiIP = xdata[spAddress]->getValue().getValue();
     spAddress--;
-    uint32_t lowIP = xdata[spAddress]->getValue();
+    uint32_t lowIP = xdata[spAddress]->getValue().getValue();
     spAddress--;
     xdata[Register::SP]->setValue(spAddress);
 
@@ -135,10 +135,10 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CJNE_RN_DATA>::cycle() {
         IP++;
         int8_t relAddr = flashMemory[IP];
         IP++;
-        if (xdata[rAddress]->getValue() != data) {
+        if (xdata[rAddress]->getValue().getValue() != data) {
             IP = IP + relAddr;
         }
-        if (xdata[rAddress]->getValue() < data) {
+        if (xdata[rAddress]->getValue().getValue() < data) {
             xdata[Register::PSW]->setBit(7, true);
         } else {
             xdata[Register::PSW]->setBit(7, false);
@@ -160,10 +160,10 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::DJNZ_RN>::cycle() {
         IP++;
         int8_t relAddr = flashMemory[IP];
         IP++;
-        uint8_t rn = xdata[regAddress]->getValue();
+        auto rn = xdata[regAddress]->getValue();
         rn--;
         xdata[regAddress]->setValue(rn);
-        if (rn != 0) {
+        if (rn.getValue() != 0) {
             IP += relAddr;
         }
 
@@ -254,8 +254,7 @@ void InstrTemp3<Instructions::JC>::execution() {
     } else {
         ipVal += rel_addr;
     }
-    uint8_t psw = xdata[Register::PSW]->getValue();
-    bool carry = psw & 0x80;
+    bool carry = xdata.PSW->getBit(7);
     if (carry) {
         IP.set(ipVal);
     }
@@ -274,8 +273,7 @@ void InstrTemp3<Instructions::JNC>::execution() {
     } else {
         ipVal += rel_addr;
     }
-    uint8_t psw = xdata[Register::PSW]->getValue();
-    bool carry = psw & 0x80;
+    bool carry = xdata.PSW->getBit(7);
     if (!carry) {
         IP.set(ipVal);
     }
@@ -287,7 +285,7 @@ void InstrTemp3<Instructions::JZ>::execution() {
     IP++;
     uint8_t rel_addr = flashMemory[IP];
     IP++;
-    bool z = xdata[Register::A]->getValue() == 0;
+    bool z = xdata.A->getValue().getValue() == 0;
 
     uint16_t ipVal = IP.getValue();
     if (rel_addr & 0x80) {
@@ -307,7 +305,7 @@ void InstrTemp3<Instructions::JNZ>::execution() {
     IP++;
     uint8_t rel_addr = flashMemory[IP];
     IP++;
-    bool z = xdata[Register::A]->getValue() == 0;
+    bool z = xdata.A->getValue().getValue() == 0;
 
     uint16_t ipVal = IP.getValue();
     if (rel_addr & 0x80) {

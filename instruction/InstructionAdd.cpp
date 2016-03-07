@@ -9,9 +9,9 @@
 template<>
 void InstrTemp2<Instructions::ADD_A_DATA>::execution() {
     IP++;
-    int8_t data = flashMemory[IP];
-    int8_t REG_A = xdata.A->getValue();
-    int16_t newValue = data + REG_A;
+    auto data = flashMemory[IP];
+    auto REG_A = xdata.A->getValue();
+    int16_t newValue = data + REG_A.getValue();
     bool carry = newValue & 0x100;
     bool ov;
     auto statusWord = xdata[Register::PSW];
@@ -33,8 +33,8 @@ void InstrTemp1<Instructions::ADD_A_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
     IP++;
     auto rn = xdata[Raddress];
-    int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = rn->getValue() + REG_A;
+    auto REG_A = xdata[Register::A]->getValue();
+    int16_t newValue = (rn->getValue() + REG_A.getValue()).getValue();
     bool carry = newValue & 0x100;
     bool ov;
     auto statusWord = xdata[Register::PSW];
@@ -49,10 +49,10 @@ void InstrTemp2<Instructions::ADD_A_AT_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP] & 0x01);
     IP++;
     auto rn = xdata[Raddress];
-    uint8_t rVal = rn->getValue();
+    auto rVal = rn->getValue();
     auto xMem = xdata[rVal];
-    int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = xMem->getValue() + REG_A;
+    auto REG_A = xdata[Register::A]->getValue();
+    int16_t newValue = (xMem->getValue() + REG_A).getValue();
     bool carry = newValue & 0x100;
     bool ov;
     auto statusWord = xdata[Register::PSW];
@@ -66,9 +66,9 @@ template<>
 void InstrTemp2<Instructions::ADD_A_DIRECT>::execution() {
     IP++;
     auto address = xdata[flashMemory[IP]];
-    uint8_t data = address->getValue();
-    int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = data + REG_A;
+    auto data = address->getValue();
+    auto REG_A = xdata[Register::A]->getValue();
+    int16_t newValue = (data + REG_A.getValue()).getValue();
     bool carry = newValue & 0x100;
     bool ov;
     auto statusWord = xdata[Register::PSW];
@@ -84,10 +84,10 @@ template<>
 void InstrTemp2<Instructions::ADDC_A_DATA>::execution() {
     IP++;
     auto statusWord = xdata[Register::PSW];
-    int8_t data = flashMemory[IP];
-    int8_t REG_A = xdata[Register::A]->getValue();
+    auto data = flashMemory[IP];
+    auto REG_A = xdata[Register::A]->getValue();
     bool carry = statusWord->getBit(7);
-    int16_t newValue = data + REG_A + carry;
+    int16_t newValue = data + REG_A.getValue() + carry;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
@@ -113,9 +113,9 @@ void InstrTemp1<Instructions::ADDC_A_RN>::execution() {
     IP++;
     auto rn = xdata[Raddress];
     auto statusWord = xdata[Register::PSW];
-    int8_t REG_A = xdata[Register::A]->getValue();
+    auto REG_A = xdata[Register::A]->getValue();
     bool carry = statusWord->getBit(7);
-    int16_t newValue = rn->getValue() + REG_A + carry ? 1 : 0;
+    int16_t newValue = (rn->getValue() + REG_A).getValue() + carry ? 1 : 0;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
@@ -129,12 +129,12 @@ void InstrTemp2<Instructions::ADDC_A_AT_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP] & 0x01);
     IP++;
     auto rn = xdata[Raddress];
-    uint8_t rVal = rn->getValue();
+    auto rVal = rn->getValue();
     auto xMem = xdata[rVal];
     auto statusWord = xdata[Register::PSW];
     bool carry = statusWord->getBit(7);
-    int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = xMem->getValue() + REG_A+ carry;
+    auto REG_A = xdata[Register::A]->getValue();
+    int16_t newValue = (xMem->getValue() + REG_A+ carry).getValue();
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);
@@ -147,11 +147,11 @@ template<>
 void InstrTemp2<Instructions::ADDC_A_DIRECT>::execution() {
     IP++;
     auto address = xdata[flashMemory[IP]];
-    uint8_t data = address->getValue();
+    auto data = address->getValue();
     auto statusWord = xdata[Register::PSW];
     bool carry = statusWord->getBit(7);
-    int8_t REG_A = xdata[Register::A]->getValue();
-    int16_t newValue = data + REG_A+ carry;
+    auto REG_A = xdata[Register::A]->getValue();
+    int16_t newValue = (data + REG_A).getValue()+ carry;
     carry = newValue & 0x100;
     bool ov;
     statusWord->setBit(7, carry);

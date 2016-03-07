@@ -15,9 +15,14 @@ class XData {
 public:
     XData();
     std::shared_ptr<MemoryLocation> A;
+    std::shared_ptr<MemoryLocation> PSW;
 public:
     std::shared_ptr<MemoryLocation> & operator[](uint16_t index) {
         return data[index];
+    }
+
+    std::shared_ptr<MemoryLocation> & operator[](Data8 index) {
+        return data[index.getValue()];
     }
 
     std::shared_ptr<MemoryLocation>  operator[](Register reg){

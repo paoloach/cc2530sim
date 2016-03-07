@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <sstream>
 #include <iomanip>
+#include "Data8.h"
 
 class MemoryLocation {
 public:
@@ -25,19 +26,18 @@ public:
     }
 
     virtual bool getBit(int index){
-        return std::bitset<8>(value)[index];
+        return  value.getBit(index);
     }
 
     virtual void setBit(int index, bool binValue){
-        auto bits = std::bitset<8>(value);
-        bits[index] = binValue;
+        value.setBit(index,binValue);
     }
 
-    virtual void setValue(uint8_t newValue){
+    virtual void setValue(Data8 newValue){
         value = newValue;
     }
 
-    virtual uint8_t getValue() {
+    virtual Data8 getValue() {
         return value;
     }
 
@@ -45,7 +45,7 @@ public:
         return name;
     }
 protected:
-    uint8_t value;
+    Data8 value;
     uint16_t address;
     std::string name;
 };

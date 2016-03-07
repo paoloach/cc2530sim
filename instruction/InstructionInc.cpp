@@ -8,8 +8,8 @@
 template<>
 void InstrTemp1<Instructions::INC_DPTR>::execution() {
     IP++;
-    uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
+    uint16_t dph = xdata[registryUtil.getDPH()]->getValue().getValue();
+    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue().getValue();
     uint16_t dp = (dph << 8) | dpl;
     dp++;
     xdata[registryUtil.getDPH()]->setValue((dp & 0xFF00) >> 8);
@@ -21,9 +21,9 @@ void InstrTemp1<Instructions::INC_DPTR>::execution() {
 template<>
 void InstrTemp1<Instructions::INC_A>::execution() {
     IP++;
-    uint8_t a = xdata[Register::A]->getValue();
+    auto a = xdata.A->getValue();
     a++;
-    xdata[Register::A]->setValue(a);
+    xdata.A->setValue(a);
     BOOST_LOG_TRIVIAL(debug) << "INC A(" << a << ")";
 }
 
@@ -32,7 +32,7 @@ void InstrTemp2<Instructions::INC_ADDR>::execution() {
     IP++;
     uint8_t address = flashMemory[IP];
     auto dest = xdata[address];
-    uint8_t val = dest->getValue();
+    auto val = dest->getValue();
     val++;
     dest->setValue(val);
     IP++;
@@ -45,9 +45,9 @@ void InstrTemp2<Instructions::INC_AT_Rn>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(rbit);
     IP++;
     auto rn = xdata[Raddress];
-    uint8_t rVal = rn->getValue();
+    auto rVal = rn->getValue();
     auto dest = xdata[rVal];
-    uint8_t val = dest->getValue();
+    auto val = dest->getValue();
     val++;
     dest->setValue(val);
     BOOST_LOG_TRIVIAL(debug) << "INC @R" << rbit << "[" << dest->getName() << "](" << val << ")";
@@ -59,7 +59,7 @@ void InstrTemp1<Instructions::INC_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(rbit);
     auto dest = xdata[Raddress];
     IP++;
-    uint8_t val = dest->getValue();
+    auto val = dest->getValue();
     val++;
     dest->setValue(val);
     BOOST_LOG_TRIVIAL(debug) << "INC R" << rbit << "(" << val << ")";

@@ -40,7 +40,7 @@ add_library(loader_lib OBJECT
         loader/IntelHexStartLinearAddress.cpp loader/IntelHexStartLinearAddress.h)
 
 set(SOURCE_FILES main.cpp Exceptions/InvalidIntelHexFile.cpp FlashMemory.cpp MemoryLocation.cpp MemoryLocation.h
-        CPU.cpp CPU.h Registers.h XData.cpp XData.h InstructionPointer.cpp InstructionPointer.h)
+        CPU.cpp CPU.h Registers.h XData.cpp XData.h InstructionPointer.cpp InstructionPointer.h Data8.cpp Data8.h)
 
 
 add_executable(cc2530sim ${SOURCE_FILES} $<TARGET_OBJECTS:instruction_lib> $<TARGET_OBJECTS:loader_lib>)

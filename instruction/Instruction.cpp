@@ -4,6 +4,7 @@
 //
 #include <boost/log/trivial.hpp>
 #include <sstream>
+#include "../Data8.h"
 #include "Instruction.h"
 
 
@@ -49,11 +50,11 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ANL_A_DATA>::cycle() {
         std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
         cycleCounter = 2;
         IP++;
-        uint8_t data = flashMemory[IP];
-        uint8_t REG_A = xdata[Register::A]->getValue();
-        xdata[Register::A]->setValue(data & REG_A);
+        Data8 data(flashMemory[IP]);
+        auto REG_A = xdata.A->getValue();
+        xdata.A->setValue(data & REG_A);
         IP++;
-        BOOST_LOG_TRIVIAL(debug) << "A <-- A  & " << (uint) data;
+        BOOST_LOG_TRIVIAL(debug) << "A <-- A  & " << data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -66,11 +67,11 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::ORL_A_DATA>::cycle() {
         std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
         cycleCounter = 2;
         IP++;
-        uint8_t data = flashMemory[IP];
-        uint8_t REG_A = xdata[Register::A]->getValue();
-        xdata[Register::A]->setValue(data | REG_A);
+        Data8 data(flashMemory[IP]);
+        auto REG_A = xdata.A->getValue();
+        xdata.A->setValue(data | REG_A);
         IP++;
-        BOOST_LOG_TRIVIAL(debug) << "A <-- A  | " << (uint) data;
+        BOOST_LOG_TRIVIAL(debug) << "A <-- A  | " << data;
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
@@ -131,13 +132,12 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
 template<>
 void InstrTemp3<Instructions::MOVC_A_DPTR>::execution() {
     IP++;
-    uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
-    uint16_t dp = (dph << 8) | dpl;
-    auto regA = xdata[Register::A];
-    int aValue = regA->getValue();
-    uint8_t val = flashMemory[dp + aValue];
-    regA->setValue(val);
+    auto dph = xdata[registryUtil.getDPH()]->getValue();
+    auto dpl = xdata[registryUtil.getDPL()]->getValue();
+    uint16_t dp = ((uint16_t) dph.getValue() << 8) | dpl.getValue();
+    auto aValue = xdata.A->getValue();
+    uint8_t val = flashMemory[dp + aValue.getSignedValue()];
+    xdata.A->setValue(val);
     BOOST_LOG_TRIVIAL(debug) << "MOVC A(=" << val << ") ,@A+DPTR (dptr=" << dp << ", A = " << aValue << ")";
 }
 
@@ -150,12 +150,11 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
         std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
         cycleCounter = 3;
         IP++;
-        uint16_t dph = xdata[registryUtil.getDPH()]->getValue();
-        uint16_t dpl = xdata[registryUtil.getDPL()]->getValue();
-        uint16_t dp = (dph << 8) | dpl;
-        auto regA = xdata[Register::A];
-        uint8_t val = xdata[dp]->getValue();
-        regA->setValue(val);
+        auto dph = xdata[registryUtil.getDPH()]->getValue();
+        auto dpl = xdata[registryUtil.getDPL()]->getValue();
+        uint16_t dp = (((uint16_t) (dph.getValue())) << 8) | dpl.getValue();
+        auto val = xdata[dp]->getValue();
+        xdata.A->setValue(val);
         BOOST_LOG_TRIVIAL(debug) << "MOVX A,@DPTR (dptr=" << dp << ")";
     }
     return instructionFactory.decode(flashMemory[IP]);
@@ -164,7 +163,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
 
 template<>
 void InstrTemp4<Instructions::PUSH>::execution() {
-    uint16_t spAddress = xdata[Register::SP]->getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
     spAddress++;
     IP++;
     uint8_t address = flashMemory[IP];
@@ -178,7 +177,7 @@ void InstrTemp4<Instructions::PUSH>::execution() {
 
 template<>
 void InstrTemp3<Instructions::POP>::execution() {
-    uint16_t spAddress = xdata[Register::SP]->getValue();
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
     IP++;
     uint8_t address = flashMemory[IP];
     auto mem = xdata[address];
@@ -198,7 +197,7 @@ void InstrTemp3<Instructions::CLR_BIT>::execution() {
     auto bit = bitAddress & 0x07;
     auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
     auto xAddress = xdata[address];
-    xAddress->setBit(bit, false);
+    xAddress->setBit(bit.getValue(), false);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "CLR BIT " << bit << " of [" << xAddress->getName() << "]";
 }
@@ -211,7 +210,7 @@ void InstrTemp2<Instructions::MOV_C_BIT_ADDR>::execution() {
     auto bit = bitAddress & 0x07;
     auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
     auto xAddress = xdata[address];
-    bool bitValue = xAddress->getBit(bit);
+    bool bitValue = xAddress->getBit(bit.getValue());
     xdata[Register::PSW]->setBit(7, bitValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "MOV C, bit " << bit << " of [" << xAddress->getName() << "]";
@@ -241,7 +240,7 @@ void InstrTemp1<Instructions::RRC_A>::execution() {
     auto reg_a = xdata[Register::A];
     auto aRR = reg_a->getValue() >> 1;
     auto statusWord = xdata[Register::PSW]->getValue();
-    if (statusWord & 0x80) {
+    if (statusWord.getBit(7)) {
         aRR |= 0x80;
     } else {
         aRR &= 0x7F;
@@ -253,14 +252,15 @@ void InstrTemp1<Instructions::RRC_A>::execution() {
 template<>
 void InstrTemp1<Instructions::RL_A>::execution() {
     auto A = xdata[Register::A];
-    uint16_t regA = A->getValue();
+    uint16_t regA = A->getValue().getValue();
     regA = regA << 1;
     if (regA & 0x100) {
         regA |= 1;
     }
     A->setValue(regA);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "RL A(" << A->getValue() << ")";
+    auto a = A->getValue();
+    BOOST_LOG_TRIVIAL(debug) << "RL A(" << a << ")";
 }
 
 
@@ -268,15 +268,16 @@ template<>
 void InstrTemp1<Instructions::RLC_A>::execution() {
     auto statusWord = xdata[Register::PSW];
     auto A = xdata[Register::A];
-    uint16_t regA = A->getValue();
+    uint16_t regA = A->getValue().getValue();
     regA = regA << 1;
-    if (statusWord->getBit(7)){
+    if (statusWord->getBit(7)) {
         regA |= 1;
     }
     if (regA & 0x100) {
-        statusWord->setBit(7,true);
+        statusWord->setBit(7, true);
     }
     A->setValue(regA);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "RL A(" << A->getValue() << ")" ;
+    auto a = A->getValue();
+    BOOST_LOG_TRIVIAL(debug) << "RL A(" << a << ")";
 }

@@ -6,7 +6,7 @@
 
 uint16_t RegistryUtil::getRAddress(uint8_t opcode) {
     uint8_t reg = opcode & 0x07;
-    return ((xData[Register::PSW]->getValue() & 0x3) << 3) | reg;
+    return ((xData[Register::PSW]->getValue().getValue() & 0x3) << 3) | reg;
 }
 
 uint16_t RegistryUtil::getDPH() {
@@ -25,8 +25,8 @@ uint16_t RegistryUtil::getDPL() {
     }
 }
 
-uint16_t RegistryUtil::getXAddressFromBitAddress(uint8_t bitAddress) {
-    uint8_t reg = bitAddress / 8;
+uint16_t RegistryUtil::getXAddressFromBitAddress(Data8 bitAddress) {
+    uint8_t reg = bitAddress.getValue() / 8;
     if (reg <=15){
         return 0x20 + reg;
     }
