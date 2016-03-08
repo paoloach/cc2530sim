@@ -197,6 +197,6 @@ XData::XData() {
 
 
     A = data[0xE0];
-    PWS = data[Register::PSW];
+    status = data[0xD0];
 
 }

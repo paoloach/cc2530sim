@@ -254,7 +254,7 @@ void InstrTemp3<Instructions::JC>::execution() {
     } else {
         ipVal += rel_addr;
     }
-    bool carry = xdata.PSW->getBit(7);
+    bool carry = xdata.status->getBit(7);
     if (carry) {
         IP.set(ipVal);
     }
@@ -273,7 +273,7 @@ void InstrTemp3<Instructions::JNC>::execution() {
     } else {
         ipVal += rel_addr;
     }
-    bool carry = xdata.PSW->getBit(7);
+    bool carry = xdata.status->getBit(7);
     if (!carry) {
         IP.set(ipVal);
     }
