@@ -13,7 +13,7 @@ void InstrTemp3<Instructions::ORL_DIRECT_A>::execution() {
     auto newValue = address->getValue() | xdata.A->getValue();
     address->setValue(newValue);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << " [" << address->getName() << "] <- A | [" << address->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "[" << address->getName() << "] <- A | [" << address->getName() << "]";
 }
 
 
@@ -27,7 +27,7 @@ void InstrTemp4<Instructions::ORL_DIRECT_DATA>::execution() {
     auto newValue = address->getValue() | data;
     address->setValue(newValue);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << " [" << address->getName() << "] <- " << data << " | [" << address->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "[" << address->getName() << "] <- " << data << " | [" << address->getName() << "]";
 }
 
 template<>
@@ -39,4 +39,38 @@ void InstrTemp2<Instructions::ORL_A_DATA>::execution() {
     xdata.A->setValue(newValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "A(" << newValue << ") <-- A  | " << data;
+}
+
+template<>
+void InstrTemp2<Instructions::ORL_A_DIRECT>::execution() {
+    IP++;
+    auto address = xdata[flashMemory[IP]];
+    auto newValue = address->getValue() | xdata.A->getValue();
+    xdata.A->setValue(newValue);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "A(" << newValue << ") <- A | [" << address->getName() << "]";
+}
+
+template<>
+void InstrTemp2<Instructions::ORL_A_AT_R0>::execution() {
+    uint16_t RAddress = registryUtil.getRAddress(flashMemory[IP] & 0x01);
+    IP++;
+    auto rn = xdata[RAddress];
+    auto rVal = rn->getValue();
+    auto address = xdata[rVal];
+    auto newValue = address->getValue() | xdata.A->getValue();
+    xdata.A->setValue(newValue);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "A(" << newValue << ") <- A | @R" << RAddress << "([" << xMem->getName() << "])";
+}
+
+template<>
+void InstrTemp1<Instructions::ORL_A_RN>::execution() {
+    int opcode = flashMemory[IP] & 0x07;
+    uint16_t RAddress = registryUtil.getRAddress(opcode);
+    IP++;
+    auto rn = xdata[Raddress];
+    auto newValue = rn->getValue() | xdata.A->getValue();
+    xdata.A->setValue(newValue);
+    BOOST_LOG_TRIVIAL(debug) << "A(" << newValue << ") <-- A  + R" << opcode;
 }

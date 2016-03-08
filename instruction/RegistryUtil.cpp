@@ -6,7 +6,7 @@
 
 uint16_t RegistryUtil::getRAddress(uint8_t opcode) {
     uint8_t reg = opcode & 0x07;
-    return ((xData[Register::PSW]->getValue().getValue() & 0x3) << 3) | reg;
+    return ((xData.status->getValue().getValue() & 0x3) << 3) | reg;
 }
 
 uint16_t RegistryUtil::getDPH() {

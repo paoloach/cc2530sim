@@ -82,7 +82,17 @@ InstructionFactory::InstructionFactory(InstructionPointer &IP, FlashMemory &flas
     decodeMap[0x42] = std::make_shared<InstrTemp3<Instructions::ORL_DIRECT_A>>(*this, IP, flashMemory,xdata);
     decodeMap[0x43] = std::make_shared<InstrTemp4<Instructions::ORL_DIRECT_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0x44] = std::make_shared<InstrTemp2<Instructions::ORL_A_DATA>>(*this, IP, flashMemory,xdata);
-
+    decodeMap[0x45] = std::make_shared<InstrTemp2<Instructions::ORL_A_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x46] = std::make_shared<InstrTemp2<Instructions::ORL_A_AT_R0>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x46] = std::make_shared<InstrTemp2<Instructions::ORL_A_AT_R0>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x48] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x49] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4A] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4B] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4C] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4D] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4E] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x4F] = std::make_shared<InstrTemp1<Instructions::ORL_A_RN>>(*this, IP, flashMemory,xdata);
 
     decodeMap[0x50] = std::make_shared<InstrTemp3<Instructions::JNC>>(*this, IP, flashMemory,xdata);
     decodeMap[0x54] = std::make_shared<InstrTempl<Instructions::ANL_A_DATA>>(*this, IP, flashMemory,xdata);

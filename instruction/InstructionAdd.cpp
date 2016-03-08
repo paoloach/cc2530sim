@@ -33,14 +33,13 @@ void InstrTemp1<Instructions::ADD_A_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
     IP++;
     auto rn = xdata[Raddress];
-    auto REG_A = xdata[Register::A]->getValue();
+    auto REG_A = xdata.A->getValue();
     int16_t newValue = (rn->getValue() + REG_A.getValue()).getValue();
     bool carry = newValue & 0x100;
     bool ov;
-    auto statusWord = xdata[Register::PSW];
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  + R" << Raddress;
 }
 
@@ -51,14 +50,13 @@ void InstrTemp2<Instructions::ADD_A_AT_RN>::execution() {
     auto rn = xdata[Raddress];
     auto rVal = rn->getValue();
     auto xMem = xdata[rVal];
-    auto REG_A = xdata[Register::A]->getValue();
+    auto REG_A = xdata.A->getValue();
     int16_t newValue = (xMem->getValue() + REG_A).getValue();
     bool carry = newValue & 0x100;
     bool ov;
-    auto statusWord = xdata[Register::PSW];
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  +@R" << Raddress << "([" << xMem->getName() << "])";
 }
 
@@ -67,14 +65,13 @@ void InstrTemp2<Instructions::ADD_A_DIRECT>::execution() {
     IP++;
     auto address = xdata[flashMemory[IP]];
     auto data = address->getValue();
-    auto REG_A = xdata[Register::A]->getValue();
+    auto REG_A = xdata.A->getValue();
     int16_t newValue = (data + REG_A.getValue()).getValue();
     bool carry = newValue & 0x100;
     bool ov;
-    auto statusWord = xdata[Register::PSW];
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  + [" << address->getName() << "] + carry";
 }
@@ -83,16 +80,15 @@ void InstrTemp2<Instructions::ADD_A_DIRECT>::execution() {
 template<>
 void InstrTemp2<Instructions::ADDC_A_DATA>::execution() {
     IP++;
-    auto statusWord = xdata[Register::PSW];
     auto data = flashMemory[IP];
-    auto REG_A = xdata[Register::A]->getValue();
-    bool carry = statusWord->getBit(7);
+    auto REG_A = xdata.A->getValue();
+    bool carry = xdata.status->getBit(7);
     int16_t newValue = data + REG_A.getValue() + carry;
     carry = newValue & 0x100;
     bool ov;
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     IP++;
     std::stringstream log;
     log << "A(=" << newValue << ") <-- A + carry ";
@@ -112,15 +108,14 @@ void InstrTemp1<Instructions::ADDC_A_RN>::execution() {
     uint16_t Raddress = registryUtil.getRAddress(flashMemory[IP]);
     IP++;
     auto rn = xdata[Raddress];
-    auto statusWord = xdata[Register::PSW];
-    auto REG_A = xdata[Register::A]->getValue();
-    bool carry = statusWord->getBit(7);
+    auto REG_A = xdata.A->getValue();
+    bool carry = xdata.status->getBit(7);
     int16_t newValue = (rn->getValue() + REG_A).getValue() + carry ? 1 : 0;
     carry = newValue & 0x100;
     bool ov;
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  + R" << Raddress << " + carry";
 }
 
@@ -131,15 +126,14 @@ void InstrTemp2<Instructions::ADDC_A_AT_RN>::execution() {
     auto rn = xdata[Raddress];
     auto rVal = rn->getValue();
     auto xMem = xdata[rVal];
-    auto statusWord = xdata[Register::PSW];
-    bool carry = statusWord->getBit(7);
-    auto REG_A = xdata[Register::A]->getValue();
+    bool carry = xdata.status->getBit(7);
+    auto REG_A = xdata.A->getValue();
     int16_t newValue = (xMem->getValue() + REG_A+ carry).getValue();
     carry = newValue & 0x100;
     bool ov;
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  +@R +carry" << Raddress << "([" << xMem->getName() << "])";
 }
 
@@ -148,15 +142,14 @@ void InstrTemp2<Instructions::ADDC_A_DIRECT>::execution() {
     IP++;
     auto address = xdata[flashMemory[IP]];
     auto data = address->getValue();
-    auto statusWord = xdata[Register::PSW];
-    bool carry = statusWord->getBit(7);
-    auto REG_A = xdata[Register::A]->getValue();
+    bool carry = xdata.status->getBit(7);
+    auto REG_A = xdata.A->getValue();
     int16_t newValue = (data + REG_A).getValue()+ carry;
     carry = newValue & 0x100;
     bool ov;
-    statusWord->setBit(7, carry);
-    statusWord->setBit(2, ov);
-    xdata[Register::A]->setValue(newValue);
+    xdata.status->setBit(7, carry);
+    xdata.status->setBit(2, ov);
+    xdata.A->setValue(newValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "A <-- A  + [" << address->getName() << "] + carry";
 }
