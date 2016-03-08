@@ -80,7 +80,10 @@ InstructionFactory::InstructionFactory(InstructionPointer &IP, FlashMemory &flas
     decodeMap[0x40] = std::make_shared<InstrTemp3<Instructions::JC>>(*this, IP, flashMemory,xdata);
     decodeMap[0x41] = std::make_shared<InstrTemp3<Instructions::AJMP>>(*this, IP, flashMemory,xdata);
     decodeMap[0x42] = std::make_shared<InstrTemp3<Instructions::ORL_DIRECT_A>>(*this, IP, flashMemory,xdata);
-    decodeMap[0x44] = std::make_shared<InstrTempl<Instructions::ORL_A_DATA>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x43] = std::make_shared<InstrTemp4<Instructions::ORL_DIRECT_DATA>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x44] = std::make_shared<InstrTemp2<Instructions::ORL_A_DATA>>(*this, IP, flashMemory,xdata);
+
+
     decodeMap[0x50] = std::make_shared<InstrTemp3<Instructions::JNC>>(*this, IP, flashMemory,xdata);
     decodeMap[0x54] = std::make_shared<InstrTempl<Instructions::ANL_A_DATA>>(*this, IP, flashMemory,xdata);
     decodeMap[0x60] = std::make_shared<InstrTemp3<Instructions::JZ>>(*this, IP, flashMemory,xdata);
