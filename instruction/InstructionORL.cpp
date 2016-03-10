@@ -116,3 +116,35 @@ void InstrTemp1<Instructions::ORL_AND_A_RN>::execution() {
     xdata.A->setValue(newValue);
     BOOST_LOG_TRIVIAL(debug) << "A(" << newValue << ") <-- A  "<< op->getOp() <<" R" << opcode;
 }
+
+template<>
+void InstrTemp2<Instructions::ORL_C_BIT>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[address];
+    bool bitValue = xAddress->getBit(bit.getValue());
+    if (bitValue) {
+        xdata[Register::PSW]->setBit(7, 1);
+    }
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "ORL C, bit " << bit << " of [" << xAddress->getName() << "]";
+}
+
+template<>
+void InstrTemp2<Instructions::ORL_C_NOT_BIT>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[address];
+    bool bitValue = xAddress->getBit(bit.getValue());
+    if (!bitValue) {
+        xdata[Register::PSW]->setBit(7, 1);
+    }
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "ORL C, bit " << bit << " of [" << xAddress->getName() << "]";
+}
