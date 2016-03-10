@@ -41,6 +41,10 @@ public:
         return Data8(value | b.value);
     }
 
+    Data8 operator^(Data8 b) {
+        return Data8(value ^ b.value);
+    }
+
     Data8 operator|=(int b) {
         value = value | b;
         return Data8(value);

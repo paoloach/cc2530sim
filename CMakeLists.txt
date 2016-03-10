@@ -30,6 +30,7 @@ add_library(instruction_lib OBJECT
         registers/T1STAT.h
         instruction/InstructionMov.cpp
         instruction/InstructionInc.cpp
+        instruction/InstructionORL.cpp
         instruction/InstructionDec.cpp registers/DPL1.h registers/IP0.h)
 
 

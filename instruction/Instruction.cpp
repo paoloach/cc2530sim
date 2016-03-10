@@ -41,25 +41,6 @@ void InstrTemp3<Instructions::MOV_DATA_DIRECT>::execution() {
     BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- 0x" << (uint) data;
 }
 
-
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::ANL_A_DATA>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 2;
-        IP++;
-        Data8 data(flashMemory[IP]);
-        auto REG_A = xdata.A->getValue();
-        xdata.A->setValue(data & REG_A);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "A <-- A  & " << data;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
-
-
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
     if (cycleCounter > 0) {
