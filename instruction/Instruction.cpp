@@ -56,22 +56,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
 }
 
 
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_RN_DATA>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 1;
-        uint16_t address = registryUtil.getRAddress(flashMemory[IP]);
-        IP++;
-        uint8_t data = flashMemory[IP];
-        xdata[address]->setValue(data);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "MOV R" << (address & 0x7) << " <--  " << (uint) data;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
+
 
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
