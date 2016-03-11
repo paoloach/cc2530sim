@@ -30,16 +30,17 @@ OrOp  orOp;
 XorOp xorOp;
 
 const OP * getOp(uint8_t data){
-    if (data & 0xF0 == 0x050){
+    if ((data & 0xF0) == 0x050){
         return &andOp;
     }
-    if (data & 0xF0 == 0x040){
+    if ((data & 0xF0) == 0x040){
         return &orOp;
     }
 
-    if (data & 0xF0 == 0x060){
+    if ((data & 0xF0) == 0x060){
         return &xorOp;
     }
+    return NULL;
 }
 
 template<>
