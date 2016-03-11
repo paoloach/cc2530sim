@@ -79,17 +79,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
     return instructionFactory.decode(flashMemory[IP]);
 }
 
-template<>
-void InstrTemp3<Instructions::MOVC_A_DPTR>::execution() {
-    IP++;
-    auto dph = xdata[registryUtil.getDPH()]->getValue();
-    auto dpl = xdata[registryUtil.getDPL()]->getValue();
-    uint16_t dp = ((uint16_t) dph.getValue() << 8) | dpl.getValue();
-    auto aValue = xdata.A->getValue();
-    uint8_t val = flashMemory[dp + aValue.getSignedValue()];
-    xdata.A->setValue(val);
-    BOOST_LOG_TRIVIAL(debug) << "MOVC A(=" << val << ") ,@A+DPTR (dptr=" << dp << ", A = " << aValue << ")";
-}
+
 
 
 template<>

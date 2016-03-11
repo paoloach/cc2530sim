@@ -136,3 +136,26 @@ void InstrTemp3<Instructions::MOV_AT_R0_DATA>::execution() {
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "MOV @R" << rbit << "[" << rn->getName()<<"] <-- " << data;
 }
+
+
+template<>
+void InstrTemp3<Instructions::MOV_A_AT_A_PC>::execution() {
+    IP++;
+    uint16_t data = flashMemory[IP];
+    uint16_t address = xdata.A->getValue().getSignedValue()+data;
+    auto xMem = flashMemory[address];
+    xdata.A->setValue(xMem);
+    BOOST_LOG_TRIVIAL(debug) << "MOV A(" << xMem << ") <-- @A+PC(" << address << ")";
+}
+
+template<>
+void InstrTemp3<Instructions::MOVC_A_DPTR>::execution() {
+    IP++;
+    auto dph = xdata[registryUtil.getDPH()]->getValue();
+    auto dpl = xdata[registryUtil.getDPL()]->getValue();
+    uint16_t dp = ((uint16_t) dph.getValue() << 8) | dpl.getValue();
+    auto aValue = xdata.A->getValue();
+    uint8_t val = flashMemory[dp + aValue.getSignedValue()];
+    xdata.A->setValue(val);
+    BOOST_LOG_TRIVIAL(debug) << "MOVC A(=" << val << ") ,@A+DPTR (dptr=" << dp << ", A = " << aValue << ")";
+}
