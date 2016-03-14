@@ -67,6 +67,15 @@ public:
         return Data8(value - b.value);
     }
 
+    Data8 operator/(Data8 b) {
+        return Data8(value / b.value);
+    }
+
+    Data8 operator%(Data8 b) {
+        return Data8(value % b.value);
+    }
+
+
     Data8 operator>>(int i) {
         return Data8(value >> i);
     }

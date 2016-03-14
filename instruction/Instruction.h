@@ -64,13 +64,39 @@ template <Instructions E>
 class InstrTemp6: public Instruction{
 public:
     InstrTemp6(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
-            Instruction(instructionFactory, IP, flashMemory, xdata,4){}
+            Instruction(instructionFactory, IP, flashMemory, xdata,6){}
 
     std::shared_ptr<Instruction> cycle() override {
         if (cycleCounter>0){
             cycleCounter--;
         } else {
             cycleCounter=6;
+            uint opcode = flashMemory[IP];
+            uint opcode1 = flashMemory[IP+1];
+            std::cout  << IP <<"  " << std::hex << opcode << " " << opcode1  << " [" << xdata[4]->getValue() << "] ";;
+            execution();
+        }
+        return instructionFactory.decode(flashMemory[IP]);
+    }
+
+    void execution() {
+        auto OP = flashMemory[IP];
+        std::cout << "unknown op 0x" <<  std::setw(2) << std::setfill('0') << std::hex << (int)OP << " at " <<IP << std::endl;
+        exit(-1);
+    }
+};
+
+template <Instructions E>
+class InstrTemp5: public Instruction{
+public:
+    InstrTemp5(InstructionFactory &instructionFactory, InstructionPointer &IP, FlashMemory &flashMemory, XData &xdata):
+            Instruction(instructionFactory, IP, flashMemory, xdata,5){}
+
+    std::shared_ptr<Instruction> cycle() override {
+        if (cycleCounter>0){
+            cycleCounter--;
+        } else {
+            cycleCounter=5;
             uint opcode = flashMemory[IP];
             uint opcode1 = flashMemory[IP+1];
             std::cout  << IP <<"  " << std::hex << opcode << " " << opcode1  << " [" << xdata[4]->getValue() << "] ";;

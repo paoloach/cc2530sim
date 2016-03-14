@@ -6,9 +6,9 @@
 #define CC2530SIM_B_H
 
 #include "../MemoryLocation.h"
-class B : public MemoryLocation {
+class RegB : public MemoryLocation {
 public:
-    B() :MemoryLocation(0xF0) {
+    RegB() :MemoryLocation(0xF0) {
 
     }
 public:

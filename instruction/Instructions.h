@@ -57,7 +57,7 @@ enum class Instructions {
     SJMP=0x80,
     ANL_C_BIT=0x82,
     MOV_A_AT_A_PC=0x83,
-
+    DIV_AB=0x84,
     MOV_DIRECT_DIRECT=0x85,
     MOV_DIRECT_AT_R=86,
     MOV_DIRECT_RN=0x88,

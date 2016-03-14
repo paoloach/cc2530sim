@@ -15,6 +15,7 @@ class XData {
 public:
     XData();
     std::shared_ptr<MemoryLocation> A;
+    std::shared_ptr<MemoryLocation> B;
     std::shared_ptr<MemoryLocation> status;
 public:
     std::shared_ptr<MemoryLocation> & operator[](uint16_t index) {

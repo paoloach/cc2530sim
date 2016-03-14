@@ -183,7 +183,7 @@ XData::XData() {
     data[0xE8] = std::make_shared<IRCON2>();
     data[0xE9] = std::make_shared<RFIRQF0>();
 
-    data[0xF0] = std::make_shared<B>();
+    data[0xF0] = std::make_shared<RegB>();
     data[0xF1] = std::make_shared<PERCFG>();
     data[0xF2] = std::make_shared<APCFG>();
     data[0xF3] = std::make_shared<P0SEL>();
@@ -197,6 +197,7 @@ XData::XData() {
 
 
     A = data[0xE0];
+    B = data[0xF0];
     status = data[0xD0];
 
 }

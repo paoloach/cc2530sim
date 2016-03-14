@@ -221,3 +221,15 @@ void InstrTemp1<Instructions::RLC_A>::execution() {
     auto a = A->getValue();
     BOOST_LOG_TRIVIAL(debug) << "RL A(" << a << ")";
 }
+
+template<>
+void InstrTemp5<Instructions::DIV_AB>::execution() {
+    IP++;
+    auto ris = xdata.A->getValue()/xdata.B->getValue();
+    auto remainder = xdata.A->getValue()%xdata.B->getValue();
+    xdata.A->setValue(ris);
+    xdata.B->setValue(remainder);
+    xdata.status->setBit(7,false);
+    xdata.status->setBit(2,false);
+    BOOST_LOG_TRIVIAL(debug) << "DIV  AB";
+}
