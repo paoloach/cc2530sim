@@ -221,3 +221,15 @@ void InstrTemp5<Instructions::DIV_AB>::execution() {
     xdata.status->setBit(2,false);
     BOOST_LOG_TRIVIAL(debug) << "DIV  AB";
 }
+
+template<>
+void InstrTemp5<Instructions::MUL_AB>::execution() {
+    IP++;
+    uint16_t ris = (uint16_t)(xdata.A->getValue().getValue())*xdata.B->getValue().getValue();
+    uint8_t hiByte = ris >> 8;
+    xdata.A->setValue(Data8(ris));
+    xdata.B->setValue(Data8(hiByte));
+    xdata.status->setBit(2,hiByte > 0);
+    xdata.status->setBit(7,false);
+    BOOST_LOG_TRIVIAL(debug) << "MUL  AB";
+}

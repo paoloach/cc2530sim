@@ -68,10 +68,10 @@ enum class Instructions {
     SUBB_A_DIRECT=0x95,
     SUBB_A_AT_RN=0x96,
     SUBB_A_RN=0x98,
-
     ORL_C_NOT_BIT=0xA0,
     INC_DPTR=0xA3,
     MOV_C_BIT_ADDR=0xA2,
+    MUL_AB=94,
     MOV_RN_DIRECT=0xA8,
     ANL_C_NOT_BIT=0xB0,
     CJNE_RN_DATA=0xB8,
