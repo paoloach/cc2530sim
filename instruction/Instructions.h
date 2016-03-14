@@ -75,6 +75,8 @@ enum class Instructions {
     MOV_AT_R_DIRECT=0xA6,
     MOV_RN_DIRECT=0xA8,
     ANL_C_NOT_BIT=0xB0,
+    CPL_BIT_ADDR=0xB2,
+    CPL_C=0xB3,
     CJNE_RN_DATA=0xB8,
     PUSH=0xC0,
     CLR_BIT=0xC2,

@@ -56,8 +56,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
 }
 
 
-
-
 template<>
 std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
     if (cycleCounter > 0) {
@@ -78,8 +76,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
-
-
 
 
 template<>
@@ -141,7 +137,6 @@ void InstrTemp3<Instructions::CLR_BIT>::execution() {
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "CLR BIT " << bit << " of [" << xAddress->getName() << "]";
 }
-
 
 
 template<>
@@ -213,23 +208,42 @@ void InstrTemp1<Instructions::RLC_A>::execution() {
 template<>
 void InstrTemp5<Instructions::DIV_AB>::execution() {
     IP++;
-    auto ris = xdata.A->getValue()/xdata.B->getValue();
-    auto remainder = xdata.A->getValue()%xdata.B->getValue();
+    auto ris = xdata.A->getValue() / xdata.B->getValue();
+    auto remainder = xdata.A->getValue() % xdata.B->getValue();
     xdata.A->setValue(ris);
     xdata.B->setValue(remainder);
-    xdata.status->setBit(7,false);
-    xdata.status->setBit(2,false);
+    xdata.status->setBit(7, false);
+    xdata.status->setBit(2, false);
     BOOST_LOG_TRIVIAL(debug) << "DIV  AB";
 }
 
 template<>
 void InstrTemp5<Instructions::MUL_AB>::execution() {
     IP++;
-    uint16_t ris = (uint16_t)(xdata.A->getValue().getValue())*xdata.B->getValue().getValue();
+    uint16_t ris = (uint16_t) (xdata.A->getValue().getValue()) * xdata.B->getValue().getValue();
     uint8_t hiByte = ris >> 8;
     xdata.A->setValue(Data8(ris));
     xdata.B->setValue(Data8(hiByte));
-    xdata.status->setBit(2,hiByte > 0);
-    xdata.status->setBit(7,false);
+    xdata.status->setBit(2, hiByte > 0);
+    xdata.status->setBit(7, false);
     BOOST_LOG_TRIVIAL(debug) << "MUL  AB";
+}
+
+template<>
+void InstrTemp3<Instructions::CPL_BIT_ADDR>::execution() {
+    IP++;
+    auto xBitAddress = flashMemory[IP];
+    auto bit = xBitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(Data8(xBitAddress));
+    auto xAddress = xdata[address];
+    xAddress->setBit(bit, !xAddress->getBit(bit));
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "CPL BIT " << bit << " of [" << xAddress->getName() << "]";
+}
+
+template<>
+void InstrTemp3<Instructions::CPL_C>::execution() {
+    IP++;
+    xdata.status->setBit(7, !xdata.status->getBit(7));
+    BOOST_LOG_TRIVIAL(debug) << "CPL C";
 }
