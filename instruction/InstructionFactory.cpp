@@ -147,6 +147,8 @@ InstructionFactory::InstructionFactory(InstructionPointer &IP, FlashMemory &flas
     decodeMap[0x83] = std::make_shared<InstrTemp3<Instructions::MOV_A_AT_A_PC>>(*this, IP, flashMemory,xdata);
     decodeMap[0x84] = std::make_shared<InstrTemp3<Instructions::DIV_AB>>(*this, IP, flashMemory,xdata);
     decodeMap[0x85] = std::make_shared<InstrTemp4<Instructions::MOV_DIRECT_DIRECT>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x86] = std::make_shared<InstrTemp4<Instructions::MOV_DIRECT_AT_R>>(*this, IP, flashMemory,xdata);
+    decodeMap[0x87] = std::make_shared<InstrTemp4<Instructions::MOV_DIRECT_AT_R>>(*this, IP, flashMemory,xdata);
     decodeMap[0x88] = std::make_shared<InstrTemp3<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
     decodeMap[0x89] = std::make_shared<InstrTemp3<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
     decodeMap[0x8A] = std::make_shared<InstrTemp3<Instructions::MOV_DIRECT_RN>>(*this, IP, flashMemory,xdata);
