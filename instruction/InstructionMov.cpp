@@ -177,3 +177,31 @@ void InstrTemp3<Instructions::MOVC_A_DPTR>::execution() {
     xdata.A->setValue(val);
     BOOST_LOG_TRIVIAL(debug) << "MOVC A(=" << val << ") ,@A+DPTR (dptr=" << dp << ", A = " << aValue << ")";
 }
+
+template<>
+void InstrTemp2<Instructions::MOV_C_BIT_ADDR>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[address];
+    bool bitValue = xAddress->getBit(bit.getValue());
+    xdata.status->setBit(7, bitValue);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "MOV C <--  bit " << bit << " of [" << xAddress->getName() << "]";
+}
+
+template<>
+void InstrTemp3<Instructions::MOV_BIT_ADDR_C>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[address];
+    bool bitValue = xdata.status->getBit(7);
+    xAddress->setBit(bit.getValue(), bitValue);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "MOV bit " << bit << " of [" << xAddress->getName() << "] --> C";
+}
