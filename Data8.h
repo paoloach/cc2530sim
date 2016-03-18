@@ -75,6 +75,25 @@ public:
         return Data8(value % b.value);
     }
 
+    bool operator<(uint8_t b) {
+        return value < b;
+    }
+
+    bool operator<(Data8 b) {
+        return value < b.value;
+    }
+
+    bool operator!=(uint8_t b) {
+        return value != b;
+    }
+
+    bool operator!=(Data8 b) {
+        return value != b.value;
+    }
+
+    bool operator==(uint8_t b) {
+        return value == b;
+    }
 
     Data8 operator>>(int i) {
         return Data8(value >> i);
