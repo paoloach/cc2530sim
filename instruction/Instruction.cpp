@@ -247,3 +247,14 @@ void InstrTemp3<Instructions::CPL_C>::execution() {
     xdata.status->setBit(7, !xdata.status->getBit(7));
     BOOST_LOG_TRIVIAL(debug) << "CPL C";
 }
+
+template<>
+void InstrTemp1<Instructions::SWAP_A>::execution() {
+    IP++;
+    uint8_t a = xdata.A->getValue().getValue();
+    uint8_t b = (a & 0x0F) << 4;
+    uint8_t c = (a & 0xF0) >> 4;
+    xdata.A->setValue(Data8(b | c));
+
+    BOOST_LOG_TRIVIAL(debug) << "SWAP A(" << xdata.A->getValue() << ")";
+}

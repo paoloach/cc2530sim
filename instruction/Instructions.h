@@ -84,6 +84,7 @@ enum class Instructions {
     PUSH=0xC0,
     CLR_BIT=0xC2,
     CLR_C=0xC3,
+    SWAP_A=0xC4,
     XCH_A_DIRECT=0xC5,
     XCH_A_AT_RN=0xC6,
     XCH_A_RN=0xC8,
