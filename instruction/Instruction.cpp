@@ -279,3 +279,28 @@ void InstrTemp1<Instructions::SWAP_A>::execution() {
 
     BOOST_LOG_TRIVIAL(debug) << "SWAP A(" << xdata.A->getValue() << ")";
 }
+
+template<>
+void InstrTemp1<Instructions::DA>::execution() {
+    IP++;
+    uint8_t a = xdata.A->getValue().getValue();
+    uint8_t b = (a & 0x0F);
+    uint8_t c = (a & 0xF0) >> 4;
+    if (b > 9 || xdata.status->getBit(6)){
+        b+=6;
+        if (b > 0xF){
+            xdata.status->setBit(7,true);
+            b &= 0xF;
+        }
+    }
+    if (c > 9 || xdata.status->getBit(7)){
+        c+=6;
+        if (c > 0xF){
+            xdata.status->setBit(7,true);
+            c &= 0xF;
+        }
+    }
+    xdata.A->setValue(Data8(b | (c << 4)));
+
+    BOOST_LOG_TRIVIAL(debug) << "DA(" << xdata.A->getValue() << ")";
+}

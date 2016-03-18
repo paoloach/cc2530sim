@@ -91,6 +91,7 @@ enum class Instructions {
     POP=0xD0,
     SETB_BIT_ADDR=0xD2,
     SET_C=0xD3,
+    DA=0xD4,
     DJNZ_RN=0xD8,
     CLR_A=0xE4,
     MOV_A_DIRECT=0xE5,
