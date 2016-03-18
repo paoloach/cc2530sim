@@ -89,6 +89,8 @@ enum class Instructions {
     XCH_A_AT_RN=0xC6,
     XCH_A_RN=0xC8,
     POP=0xD0,
+    SETB_BIT_ADDR=0xD2,
+    SET_C=0xD3,
     DJNZ_RN=0xD8,
     CLR_A=0xE4,
     MOV_A_DIRECT=0xE5,

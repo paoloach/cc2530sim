@@ -138,6 +138,19 @@ void InstrTemp3<Instructions::CLR_BIT>::execution() {
     BOOST_LOG_TRIVIAL(debug) << "CLR BIT " << bit << " of [" << xAddress->getName() << "]";
 }
 
+template<>
+void InstrTemp3<Instructions::SETB_BIT_ADDR>::execution() {
+    IP++;
+    auto xBitAddress = xdata[flashMemory[IP]];
+    auto bitAddress = xBitAddress->getValue();
+    auto bit = bitAddress & 0x07;
+    auto address = registryUtil.getXAddressFromBitAddress(xBitAddress->getValue());
+    auto xAddress = xdata[address];
+    xAddress->setBit(bit.getValue(), true);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "SET BIT " << bit << " of [" << xAddress->getName() << "]";
+}
+
 
 template<>
 void InstrTemp1<Instructions::CLR_C>::execution() {
@@ -145,6 +158,14 @@ void InstrTemp1<Instructions::CLR_C>::execution() {
     auto statusWord = xdata[Register::PSW];
     statusWord->setBit(7, false);
     BOOST_LOG_TRIVIAL(debug) << "CLR C ";
+}
+
+template<>
+void InstrTemp1<Instructions::SET_C>::execution() {
+    IP++;
+    auto statusWord = xdata[Register::PSW];
+    statusWord->setBit(7, true);
+    BOOST_LOG_TRIVIAL(debug) << "SETB C ";
 }
 
 template<>
