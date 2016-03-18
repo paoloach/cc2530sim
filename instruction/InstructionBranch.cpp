@@ -124,26 +124,19 @@ void InstrTemp4<Instructions::RETI>::execution() {
 
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::DJNZ_RN>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 3;
-        uint16_t regAddress = registryUtil.getRAddress(flashMemory[IP]);
-        IP++;
-        int8_t relAddr = flashMemory[IP];
-        IP++;
-        auto rn = xdata[regAddress]->getValue();
-        rn--;
-        xdata[regAddress]->setValue(rn);
-        if (rn.getValue() != 0) {
-            IP += relAddr;
-        }
-
-        BOOST_LOG_TRIVIAL(debug) << "DJNZ R" << (regAddress & 0x7) << "," << (int) relAddr;
+void InstrTemp3<Instructions::DJNZ_RN>::execution() {
+    uint16_t regAddress = registryUtil.getRAddress(flashMemory[IP]);
+    IP++;
+    int8_t relAddr = flashMemory[IP];
+    IP++;
+    auto rn = xdata[regAddress]->getValue();
+    rn--;
+    xdata[regAddress]->setValue(rn);
+    if (rn.getValue() != 0) {
+        IP += relAddr;
     }
-    return instructionFactory.decode(flashMemory[IP]);
+
+    BOOST_LOG_TRIVIAL(debug) << "DJNZ R" << (regAddress & 0x7) << "," << (int) relAddr;
 }
 
 template<>
@@ -300,7 +293,7 @@ void InstrTemp4<Instructions::CJNE_A_DATA>::execution() {
     IP++;
     int8_t relAddr = flashMemory[IP];
     IP++;
-    if (xdata.A->getValue() != data){
+    if (xdata.A->getValue() != data) {
         IP = IP + relAddr;
     }
     bool C = xdata.A->getValue() < data;
@@ -314,18 +307,18 @@ void InstrTemp4<Instructions::CJNE_A_DIRECT>::execution() {
     IP++;
     int8_t relAddr = flashMemory[IP];
     IP++;
-    if (xdata.A->getValue() != data->getValue()){
+    if (xdata.A->getValue() != data->getValue()) {
         IP = IP + relAddr;
     }
     bool C = xdata.A->getValue() < data->getValue();
     xdata.status->setBit(7, C);
-    BOOST_LOG_TRIVIAL(debug) << "CJNE A,[" <<  data->getName() << "](" << data->getValue() << "), " << (int) relAddr;
+    BOOST_LOG_TRIVIAL(debug) << "CJNE A,[" << data->getName() << "](" << data->getValue() << "), " << (int) relAddr;
 }
 
 
 template<>
 void InstrTemp4<Instructions::CJNE_AT_RN_DATA>::execution() {
-    uint8_t  rbit = flashMemory[IP] & 0x01;
+    uint8_t rbit = flashMemory[IP] & 0x01;
     uint16_t rAddress = registryUtil.getRAddress(rbit);
     IP++;
     uint8_t data = flashMemory[IP];
@@ -338,12 +331,12 @@ void InstrTemp4<Instructions::CJNE_AT_RN_DATA>::execution() {
     bool C = xdata[rAddress]->getValue() < data;
     xdata.status->setBit(7, C);
 
-    BOOST_LOG_TRIVIAL(debug) << "CJNE R" << rbit<< ", " << (uint) data << ", " << (int) relAddr;
+    BOOST_LOG_TRIVIAL(debug) << "CJNE R" << rbit << ", " << (uint) data << ", " << (int) relAddr;
 }
 
 template<>
 void InstrTemp4<Instructions::CJNE_RN_DATA>::execution() {
-    uint8_t  bit = flashMemory[IP] & 0x07;
+    uint8_t bit = flashMemory[IP] & 0x07;
     uint16_t rAddress = registryUtil.getRAddress(flashMemory[IP]);
     IP++;
     uint8_t data = flashMemory[IP];
@@ -359,5 +352,5 @@ void InstrTemp4<Instructions::CJNE_RN_DATA>::execution() {
         xdata.status->setBit(7, false);
     }
 
-    BOOST_LOG_TRIVIAL(debug) << "CJNE R" << bit<< ", " << (uint) data << ", " << (int) relAddr;
+    BOOST_LOG_TRIVIAL(debug) << "CJNE R" << bit << ", " << (uint) data << ", " << (int) relAddr;
 }
