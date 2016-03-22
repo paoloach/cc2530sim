@@ -37,22 +37,22 @@ void InstrTemp3<Instructions::MOV_DATA_DIRECT>::execution() {
     IP++;
     uint8_t data = flashMemory[IP];
     IP++;
-    xdata[address]->setValue(data);
+    xdata.A->setValue(data);
     BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- 0x" << (uint) data;
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::CLR_A>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 1;
-        xdata[Register::A]->setValue(0);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "CLR A";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp1<Instructions::CLR_A>::execution() {
+    xdata.A->setValue(0);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "CLR A";
+}
+
+template<>
+void InstrTemp1<Instructions::CPL_A>::execution() {
+    xdata.A->setValue(!xdata.A->getValue());
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "CPL A";
 }
 
 
@@ -76,9 +76,6 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
     }
     return instructionFactory.decode(flashMemory[IP]);
 }
-
-
-
 
 
 template<>
@@ -270,17 +267,17 @@ void InstrTemp1<Instructions::DA>::execution() {
     uint8_t a = xdata.A->getValue().getValue();
     uint8_t b = (a & 0x0F);
     uint8_t c = (a & 0xF0) >> 4;
-    if (b > 9 || xdata.status->getBit(6)){
-        b+=6;
-        if (b > 0xF){
-            xdata.status->setBit(7,true);
+    if (b > 9 || xdata.status->getBit(6)) {
+        b += 6;
+        if (b > 0xF) {
+            xdata.status->setBit(7, true);
             b &= 0xF;
         }
     }
-    if (c > 9 || xdata.status->getBit(7)){
-        c+=6;
-        if (c > 0xF){
-            xdata.status->setBit(7,true);
+    if (c > 9 || xdata.status->getBit(7)) {
+        c += 6;
+        if (c > 0xF) {
+            xdata.status->setBit(7, true);
             c &= 0xF;
         }
     }

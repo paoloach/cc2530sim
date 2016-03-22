@@ -125,6 +125,10 @@ public:
         return  res;
     }
 
+    Data8 operator !(){
+        return Data8(!value);
+    }
+
     friend boost::log::basic_formatting_ostream<char> &operator<<(boost::log::basic_formatting_ostream<char> &out,
                                                                   Data8 &data) {
         std::stringstream ss;
