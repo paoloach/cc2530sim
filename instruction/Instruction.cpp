@@ -15,19 +15,12 @@ void InstrTemp1<Instructions::NOP>::execution() {
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_A_DATA>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 2;
-        IP++;
-        uint8_t data = flashMemory[IP];
-        IP++;
-        xdata[Register::A]->setValue(data);
-        BOOST_LOG_TRIVIAL(debug) << "move A <-- 0x" << (uint) data;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp2<Instructions::MOV_A_DATA>::execution() {
+    IP++;
+    uint8_t data = flashMemory[IP];
+    IP++;
+    xdata[Register::A]->setValue(data);
+    BOOST_LOG_TRIVIAL(debug) << "move A <-- 0x" << (uint) data;
 }
 
 template<>
@@ -57,24 +50,17 @@ void InstrTemp1<Instructions::CPL_A>::execution() {
 
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 3;
-        IP++;
-        uint8_t dphVal = flashMemory[IP];
-        uint16_t DPH = registryUtil.getDPH();
-        xdata[DPH]->setValue(dphVal);
-        IP++;
-        uint8_t dplVal = flashMemory[IP];
-        uint16_t DPL = registryUtil.getDPL();
-        xdata[DPL]->setValue(dplVal);
-        IP++;
-        BOOST_LOG_TRIVIAL(debug) << "MOV DPTR," << (uint) dphVal << (uint) dplVal;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp3<Instructions::MOV_DPTR_DATA>::execution() {
+    IP++;
+    uint8_t dphVal = flashMemory[IP];
+    uint16_t DPH = registryUtil.getDPH();
+    xdata[DPH]->setValue(dphVal);
+    IP++;
+    uint8_t dplVal = flashMemory[IP];
+    uint16_t DPL = registryUtil.getDPL();
+    xdata[DPL]->setValue(dplVal);
+    IP++;
+    BOOST_LOG_TRIVIAL(debug) << "MOV DPTR," << (uint) dphVal << (uint) dplVal;
 }
 
 

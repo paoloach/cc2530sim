@@ -37,61 +37,42 @@ void InstrTemp6<Instructions::ACALL>::execution() {
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::LJMP>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << IP << "  ";
-        cycleCounter = 3;
-        IP++;
-        IP.set(flashMemory[IP] * 256 + flashMemory[IP + 1]);
-        BOOST_LOG_TRIVIAL(debug) << "LJMP (at " << IP << ")";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp4<Instructions::LJMP>::execution() {
+    IP++;
+    IP.set(flashMemory[IP] * 256 + flashMemory[IP + 1]);
+    BOOST_LOG_TRIVIAL(debug) << "LJMP (at " << IP << ")";
 }
 
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::JMP_A_DPTR>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        BOOST_LOG_TRIVIAL(debug) << IP << "  ";
-        cycleCounter = 2;
-        uint16_t dph = xdata[registryUtil.getDPH()]->getValue().getValue();
-        uint16_t dpl = xdata[registryUtil.getDPL()]->getValue().getValue();
-        uint16_t dp = (dph << 8) | dpl;
-        auto regA = xdata[Register::A]->getValue();
-        IP.set(dp + regA.getValue());
-        BOOST_LOG_TRIVIAL(debug) << "JMP @A+DTR (at " << IP << ")";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp2<Instructions::JMP_A_DPTR>::execution() {
+    BOOST_LOG_TRIVIAL(debug) << IP << "  ";
+    cycleCounter = 2;
+    uint16_t dph = xdata[registryUtil.getDPH()]->getValue().getValue();
+    uint16_t dpl = xdata[registryUtil.getDPL()]->getValue().getValue();
+    uint16_t dp = (dph << 8) | dpl;
+    auto regA = xdata[Register::A]->getValue();
+    IP.set(dp + regA.getValue());
+    BOOST_LOG_TRIVIAL(debug) << "JMP @A+DTR (at " << IP << ")";
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::LCALL>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 6;
-        IP++;
-        InstructionPointer newAddress;
-        newAddress.setHighByte(flashMemory[IP]);
-        IP++;
-        newAddress.setLowByte(flashMemory[IP]);
-        IP++;
-        InstructionPointer oldAddress = IP;
-        uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
-        spAddress++;
-        xdata[spAddress]->setValue(IP.getLowByte());
-        spAddress++;
-        xdata[spAddress]->setValue(IP.getHiByte());
-        xdata[Register::SP]->setValue(spAddress);
-        IP = newAddress;
-        BOOST_LOG_TRIVIAL(debug) << "LCALL to address " << newAddress << " (old address was " << oldAddress << ")";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+void InstrTemp6<Instructions::LCALL>::execution() {
+    IP++;
+    InstructionPointer newAddress;
+    newAddress.setHighByte(flashMemory[IP]);
+    IP++;
+    newAddress.setLowByte(flashMemory[IP]);
+    IP++;
+    InstructionPointer oldAddress = IP;
+    uint16_t spAddress = xdata[Register::SP]->getValue().getValue();
+    spAddress++;
+    xdata[spAddress]->setValue(IP.getLowByte());
+    spAddress++;
+    xdata[spAddress]->setValue(IP.getHiByte());
+    xdata[Register::SP]->setValue(spAddress);
+    IP = newAddress;
+    BOOST_LOG_TRIVIAL(debug) << "LCALL to address " << newAddress << " (old address was " << oldAddress << ")";
 }
 
 template<>
@@ -140,20 +121,13 @@ void InstrTemp3<Instructions::DJNZ_RN>::execution() {
 }
 
 template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::SJMP>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 3;
-        IP++;
-        int8_t relAddr = flashMemory[IP];
-        IP++;
-        IP += relAddr;
+void InstrTemp3<Instructions::SJMP>::execution() {
+    IP++;
+    int8_t relAddr = flashMemory[IP];
+    IP++;
+    IP += relAddr;
 
-        BOOST_LOG_TRIVIAL(debug) << "SJMP AT " << IP;
-    }
-    return instructionFactory.decode(flashMemory[IP]);
+    BOOST_LOG_TRIVIAL(debug) << "SJMP AT " << IP;
 }
 
 
