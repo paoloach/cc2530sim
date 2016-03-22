@@ -31,12 +31,12 @@ void InstrTemp3<Instructions::MOV_DIRECT_AT_R>::execution() {
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
     BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << value << ") <-- @R" <<
-                rbit << " [" << addressSrc->getName() << "]";
+                             rbit << " [" << addressSrc->getName() << "]";
 }
 
 template<>
 void InstrTemp3<Instructions::MOV_DIRECT_RN>::execution() {
-    uint8_t data =flashMemory[IP];
+    uint8_t data = flashMemory[IP];
     uint16_t reg = data & 0x07;
     uint16_t Raddress = registryUtil.getRAddress(data);
     auto addressSrc = xdata[Raddress];
@@ -46,7 +46,7 @@ void InstrTemp3<Instructions::MOV_DIRECT_RN>::execution() {
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
     BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << value << ") <-- R" <<
-                reg << " (" << addressSrc->getValue() << ")";
+                             reg << " (" << addressSrc->getValue() << ")";
 }
 
 
@@ -134,7 +134,8 @@ void InstrTemp5<Instructions::MOV_AT_R_DIRECT>::execution() {
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
     BOOST_LOG_TRIVIAL(debug) << "MOV  @R" <<
-                             rbit << " [" << addressSrc->getName() << "] <-- [" << addressDest->getName() << "](" << value << ") ";
+                             rbit << " [" << addressSrc->getName() << "] <-- [" << addressDest->getName() << "](" <<
+                             value << ") ";
 }
 
 template<>
@@ -169,7 +170,7 @@ void InstrTemp3<Instructions::MOV_AT_R0_DATA>::execution() {
     auto rn = xdata[Raddress];
     rn->setValue(Data8(data));
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "MOV @R" << rbit << "[" << rn->getName()<<"] <-- " << data;
+    BOOST_LOG_TRIVIAL(debug) << "MOV @R" << rbit << "[" << rn->getName() << "] <-- " << data;
 }
 
 
@@ -177,7 +178,7 @@ template<>
 void InstrTemp3<Instructions::MOV_A_AT_A_PC>::execution() {
     IP++;
     uint16_t data = flashMemory[IP];
-    uint16_t address = xdata.A->getValue().getSignedValue()+data;
+    uint16_t address = xdata.A->getValue().getSignedValue() + data;
     auto xMem = flashMemory[address];
     xdata.A->setValue(xMem);
     BOOST_LOG_TRIVIAL(debug) << "MOV A(" << xMem << ") <-- @A+PC(" << address << ")";
@@ -221,4 +222,32 @@ void InstrTemp3<Instructions::MOV_BIT_ADDR_C>::execution() {
     xAddress->setBit(bit.getValue(), bitValue);
     IP++;
     BOOST_LOG_TRIVIAL(debug) << "MOV bit " << bit << " of [" << xAddress->getName() << "] --> C";
+}
+
+template<>
+void InstrTemp3<Instructions::MOVX_AT_DPTR_A>::execution() {
+    IP++;
+    auto dph = xdata[registryUtil.getDPH()]->getValue();
+    auto dpl = xdata[registryUtil.getDPL()]->getValue();
+    uint16_t dp = (((uint16_t) (dph.getValue())) << 8) | dpl.getValue();
+    xdata.A->setValue(0);
+    BOOST_LOG_TRIVIAL(warning) << "MOVX @DPTR (dptr=" << dp << "), A (not implem,emted)";
+}
+
+template<>
+void InstrTemp3<Instructions::MOVX_A_AT_R>::execution() {
+    uint16_t rbit = flashMemory[IP] & 0x01;
+    IP++;
+    xdata.A->setValue(0);
+    BOOST_LOG_TRIVIAL(warning) << "MOVX A,@R" << rbit << " (not implemented)";
+}
+
+template<>
+void InstrTemp3<Instructions::MOVX_A_AT_DPTR>::execution() {
+    IP++;
+    auto dph = xdata[registryUtil.getDPH()]->getValue();
+    auto dpl = xdata[registryUtil.getDPL()]->getValue();
+    uint16_t dp = (((uint16_t) (dph.getValue())) << 8) | dpl.getValue();
+    xdata.A->setValue(0);
+    BOOST_LOG_TRIVIAL(warning) << "MOVX A, @DPTR (dptr=" << dp << ") (not implem,emted)";
 }

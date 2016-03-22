@@ -78,23 +78,7 @@ std::shared_ptr<Instruction> InstrTempl<Instructions::MOV_DPTR_DATA>::cycle() {
 }
 
 
-template<>
-std::shared_ptr<Instruction> InstrTempl<Instructions::MOVX_A_AT_DPTR>::cycle() {
-    if (cycleCounter > 0) {
-        cycleCounter--;
-    } else {
-        std::cout << std::setfill('0') << std::setw(4) << IP << "  ";
-        cycleCounter = 3;
-        IP++;
-        auto dph = xdata[registryUtil.getDPH()]->getValue();
-        auto dpl = xdata[registryUtil.getDPL()]->getValue();
-        uint16_t dp = (((uint16_t) (dph.getValue())) << 8) | dpl.getValue();
-        auto val = xdata[dp]->getValue();
-        xdata.A->setValue(val);
-        BOOST_LOG_TRIVIAL(debug) << "MOVX A,@DPTR (dptr=" << dp << ")";
-    }
-    return instructionFactory.decode(flashMemory[IP]);
-}
+
 
 
 template<>

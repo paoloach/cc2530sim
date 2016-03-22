@@ -93,13 +93,15 @@ enum class Instructions {
     SET_C=0xD3,
     DA=0xD4,
     DJNZ_RN=0xD8,
+    MOVX_A_AT_DPTR=0xE0,
+    MOVX_A_AT_R=0xE2,
     CLR_A=0xE4,
     MOV_A_DIRECT=0xE5,
 
     MOV_A_AT_RN=0xE6,
     MOV_A_RN=0xE8,
 
-    MOVX_A_AT_DPTR=0xF0,
+    MOVX_AT_DPTR_A=0xF0,
     MOV_DIRECT_A=0xF5,
     MOV_AT_RN_A=0xF6,
     MOV_RN_A = 0xF8
