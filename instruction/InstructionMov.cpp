@@ -251,3 +251,11 @@ void InstrTemp3<Instructions::MOVX_A_AT_DPTR>::execution() {
     xdata.A->setValue(0);
     BOOST_LOG_TRIVIAL(warning) << "MOVX A, @DPTR (dptr=" << dp << ") (not implem,emted)";
 }
+
+template<>
+void InstrTemp3<Instructions::MOVX_AT_R_A>::execution() {
+    uint16_t rbit = flashMemory[IP] & 0x01;
+    IP++;
+    xdata.A->setValue(0);
+    BOOST_LOG_TRIVIAL(warning) << "MOVX @R" << rbit << ",A (not implemented)";
+}

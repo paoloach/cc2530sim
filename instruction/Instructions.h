@@ -102,6 +102,7 @@ enum class Instructions {
     MOV_A_RN=0xE8,
 
     MOVX_AT_DPTR_A=0xF0,
+    MOVX_AT_R_A=0xF2,
     MOV_DIRECT_A=0xF5,
     MOV_AT_RN_A=0xF6,
     MOV_RN_A = 0xF8
