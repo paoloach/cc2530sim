@@ -45,8 +45,7 @@ void InstrTemp3<Instructions::MOV_DIRECT_RN>::execution() {
     IP++;
     auto value = addressSrc->getValue();
     addressDest->setValue(value);
-    BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << value << ") <-- R" <<
-                             reg << " (" << addressSrc->getValue() << ")";
+    BOOST_LOG_TRIVIAL(debug) << "MOV [" << addressDest->getName() << "](" << value << ") <-- R" << reg;
 }
 
 
@@ -146,14 +145,12 @@ void InstrTemp4<Instructions::MOV_RN_DIRECT>::execution() {
     auto data = xdata[address]->getValue();
     xdata[Raddress]->setValue(data);
     IP++;
-    BOOST_LOG_TRIVIAL(debug) << "MOV R" << (Raddress & 0x7) << "(=" << data << ") <--  [" <<
-                             xdata[address]->getName() << "]";
+    BOOST_LOG_TRIVIAL(debug) << "MOV R" << (Raddress & 0x7) << "(" << data << ") <--  [" << xdata[address]->getName() << "]";
 }
 
 template<>
 void InstrTemp2<Instructions::MOV_RN_DATA>::execution() {
     uint16_t address = registryUtil.getRAddress(flashMemory[IP]);
-    IP++;
     IP++;
     uint8_t data = flashMemory[IP];
     xdata[address]->setValue(data);

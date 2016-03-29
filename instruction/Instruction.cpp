@@ -30,8 +30,8 @@ void InstrTemp3<Instructions::MOV_DATA_DIRECT>::execution() {
     IP++;
     uint8_t data = flashMemory[IP];
     IP++;
-    xdata.A->setValue(data);
-    BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- 0x" << (uint) data;
+    xdata[address]->setValue(data);
+    BOOST_LOG_TRIVIAL(debug) << "move [" << xdata[address]->getName() << "] <-- " << Data8(data);
 }
 
 template<>

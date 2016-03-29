@@ -11,6 +11,7 @@ CPU::CPU(FlashMemory &flashMemory) :flashMemory(flashMemory),instructionFactory(
 
 void CPU::click() {
     currentInstruct = currentInstruct->cycle();
+    usleep(50000);
 }
 
 void CPU::reset() {
